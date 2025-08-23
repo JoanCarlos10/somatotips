@@ -90,21 +90,32 @@
 </section>
 
 
-    <section id="testimonis">
+   <section id="testimonis">
   <h2>Testimonis principals</h2>
-  <div class="grid cols-3">
-    <div class="card">
-      <em>“Vaig fer el test i em vaig adonar que em veia molt reflectit en els resultats. Ha estat interessant.”</em>
-      <br><small class="muted">Laia, 17 anys</small>
+
+  <div class="carousel" aria-label="Carrusel de testimonis">
+    <button class="car-btn prev" aria-label="Anterior">‹</button>
+
+    <div class="car-track">
+      <figure class="car-slide card">
+        <blockquote>“Vaig fer el test i em vaig sentir molt identificada amb el resultat. M’ha ajudat a reflexionar.”</blockquote>
+        <figcaption><small class="muted">Laia, 17 anys</small></figcaption>
+      </figure>
+
+      <figure class="car-slide card">
+        <blockquote>“El treball mostra que no tot el que sembla ciència ho és. Bona mirada crítica.”</blockquote>
+        <figcaption><small class="muted">Marc, company de classe</small></figcaption>
+      </figure>
+
+      <figure class="car-slide card">
+        <blockquote>“El somatotip pot orientar, però és limitat per explicar la diversitat corporal.”</blockquote>
+        <figcaption><small class="muted">Tutor del TR</small></figcaption>
+      </figure>
     </div>
-    <div class="card">
-      <em>“El treball mostra que no tot el que sembla ciència realment ho és. Em va fer reflexionar.”</em>
-      <br><small class="muted">Marc, company de classe</small>
-    </div>
-    <div class="card">
-      <em>“El sistema del somatotip és útil per conèixer diferències, però massa simple per explicar tota la realitat del cos.”</em>
-      <br><small class="muted">Tutor del TR</small>
-    </div>
+
+    <button class="car-btn next" aria-label="Següent">›</button>
+
+    <div class="car-dots" role="tablist" aria-label="Paginació del carrusel"></div>
   </div>
 </section>
 
@@ -178,6 +189,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
