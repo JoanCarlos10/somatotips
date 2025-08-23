@@ -23,5 +23,16 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
     "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada. No té en compte la composició corporal (greix vs múscul).";
 });
 
+// Cerrar otros acordeones cuando se abre uno
+document.querySelectorAll('#faq details').forEach((det) => {
+  det.addEventListener('toggle', () => {
+    if (det.open) {
+      document.querySelectorAll('#faq details').forEach((other) => {
+        if (other !== det) other.removeAttribute('open');
+      });
+    }
+  });
+});
+
 
 
