@@ -16,6 +16,9 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
     resultat = "Somatotip orientatiu: Endomorf";
   }
 
-  resultat += ` (IMC: ${imc.toFixed(1)}, activitat: ${activitat})`;
-  document.getElementById("resultat").textContent = resultat;
+  document.getElementById("resultat").textContent =
+    `${resultat} (IMC: ${imc.toFixed(1)}, activitat: ${activitat})`;
+
+  document.getElementById("explicacio-imc").textContent =
+    "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada. No té en compte la composició corporal (greix vs múscul).";
 });
