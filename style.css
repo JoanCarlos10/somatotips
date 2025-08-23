@@ -225,3 +225,7 @@ footer {
   max-height: 40px;
   vertical-align: middle;
 }
+
+section {
+  scroll-margin-top: 80px; /* Ajusta segons l’alçada de la teva barra de navegació */
+}
