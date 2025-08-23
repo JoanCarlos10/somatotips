@@ -1,14 +1,21 @@
-document.getElementById('form-somatotip')?.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const pes = +e.target.pes.value || 0;
-    const altura = (+e.target.altura.value || 0)/100;
-    const imc = altura>0 ? (pes/(altura*altura)).toFixed(1) : '—';
-    let tipus = 'Mesomorf (demo)';
-    if(imc !== '—'){
-      const n = parseFloat(imc);
-      if(n < 19) tipus = 'Ectomorf (demo)';
-      else if(n > 26) tipus = 'Endomorf (demo)';
-    }
-    document.getElementById('resultat').textContent = `IMC: ${imc} · Somatotip orientatiu: ${tipus}`;
-  });
+document.getElementById("form-somatotip").addEventListener("submit", function(e) {
+  e.preventDefault();
   
+  const altura = parseInt(this.altura.value);
+  const pes = parseInt(this.pes.value);
+  const activitat = this.activitat.value;
+
+  const imc = pes / ((altura / 100) ** 2);
+  let resultat = "";
+
+  if (imc < 18.5) {
+    resultat = "Somatotip orientatiu: Ectomorf";
+  } else if (imc < 25) {
+    resultat = "Somatotip orientatiu: Mesomorf";
+  } else {
+    resultat = "Somatotip orientatiu: Endomorf";
+  }
+
+  resultat += ` (IMC: ${imc.toFixed(1)}, activitat: ${activitat})`;
+  document.getElementById("resultat").textContent = resultat;
+});
