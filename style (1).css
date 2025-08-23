@@ -1,0 +1,24 @@
+:root{--bg:#0e0f12;--ink:#e6e6e6;--accent:#5ee6a8}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.container{max-width:1100px;margin:auto;padding:0 16px}
+nav{position:sticky;top:0;background:#11131a;border-bottom:1px solid #20222b;z-index:10}
+nav .bar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 0}
+.logo{font-weight:700;letter-spacing:.3px}
+.menu{display:flex;flex-wrap:wrap;gap:10px}
+.menu a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--ink)}
+.menu a:hover{background:#1a1d27}
+.hero{padding:56px 0 28px;border-bottom:1px solid #20222b}
+h1{margin:0 0 8px}
+.tag{display:inline-block;background:#152a1f;color:#c8ffe5;border:1px solid #244e3c;padding:4px 8px;border-radius:999px;font-size:.8rem}
+section{padding:40px 0;border-bottom:1px solid #20222b}
+section h2{margin:0 0 12px}
+.card{background:#13161f;border:1px solid #20222b;border-radius:14px;padding:16px}
+.grid{display:grid;gap:16px}
+.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.grid.cols-2,.grid.cols-3{grid-template-columns:1fr}}
+button, .btn{background:var(--accent);color:#102;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #2a2f3a;background:#0f1219;color:var(--ink)}
+small.muted{color:#9aa3b2}
+footer{padding:28px 0;color:#9aa3b2}

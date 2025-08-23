@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Somatotips</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <div class="container bar">
+      <div class="logo">Somatotips</div>
+      <div class="menu">
+        <a href="#info">Informació</a>
+        <a href="#faq">FAQ</a>
+        <a href="#testimonis">Testimonis</a>
+        <a href="#formulari">Formulari</a>
+        <a href="#dietes">Taula de dietes</a>
+        <a href="#imatges">Imatges & Gràfics</a>
+        <a href="#xat">Xat IA</a>
+        <a href="#contacte">Contacte</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <span class="tag">Treball de recerca</span>
+      <h1>Somatotip: ciència o pseudociència?</h1>
+      <p class="muted">Projecte web per presentar la recerca, materials i eines interactives.</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="info">
+      <h2>Informació</h2>
+      <div class="card">
+        <p>Context breu del teu treball: origen del concepte de somatotip, autors, crítiques, estat de l’evidència, etc.</p>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>Preguntes freqüents</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <strong>Què és un somatotip?</strong>
+          <p>Resposta curta…</p>
+        </div>
+        <div class="card">
+          <strong>És fiable científicament?</strong>
+          <p>Resposta curta…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonis">
+      <h2>Testimonis de participants</h2>
+      <div class="grid cols-3">
+        <div class="card"><em>“Vaig participar i…”</em><br><small class="muted">Nom, curs</small></div>
+        <div class="card"><em>“La prova em va ajudar a…”</em><br><small class="muted">Nom, curs</small></div>
+        <div class="card"><em>“Interessant per comparar…”</em><br><small class="muted">Nom, curs</small></div>
+      </div>
+    </section>
+
+    <section id="formulari">
+      <h2>Formulari: quin és el teu somatotip?</h2>
+      <div class="card">
+        <form id="form-somatotip">
+          <div class="grid cols-3">
+            <div>
+              <label>Alçada (cm)</label>
+              <input type="number" name="altura" min="80" max="230" required>
+            </div>
+            <div>
+              <label>Pes (kg)</label>
+              <input type="number" name="pes" min="20" max="250" required>
+            </div>
+            <div>
+              <label>Nivell d'activitat</label>
+              <select name="activitat">
+                <option>Baix</option>
+                <option>Mitjà</option>
+                <option>Alt</option>
+              </select>
+            </div>
+          </div>
+          <p><small class="muted">*Model orientatiu per a la demo del TDR.</small></p>
+          <button type="submit">Calcular somatotip (demo)</button>
+          <p id="resultat" class="muted" style="margin-top:10px"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="dietes">
+      <h2>Taula de dietes ideals (demo)</h2>
+      <div class="card">
+        <p>Taula orientativa per objectius (pèrdua de pes, manteniment, guany muscular). Més endavant podem generar una taula real amb valors.</p>
+        <div class="grid cols-3">
+          <div class="card">
+            <strong>Pèrdua de pes</strong>
+            <ul>
+              <li>Déficit lleu de calories</li>
+              <li>+ verdures, + proteïna</li>
+              <li>Restringir ultraprocessats</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Manteniment</strong>
+            <ul>
+              <li>Equilibri macro</li>
+              <li>Hàbits sostenibles</li>
+              <li>Activitat regular</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Guany muscular</strong>
+            <ul>
+              <li>Lleuger superàvit calòric</li>
+              <li>Proteïna 1.6–2.2 g/kg</li>
+              <li>Força 3–5 dies/setmana</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="imatges">
+      <h2>Imatges i gràfics</h2>
+      <div class="grid cols-3">
+        <div class="card">Placeholder 1</div>
+        <div class="card">Placeholder 2</div>
+        <div class="card">Placeholder 3</div>
+      </div>
+    </section>
+
+    <section id="xat">
+      <h2>Xat IA (placeholder)</h2>
+      <div class="card">
+        <p>Aquí integrarem un xat IA (per ex., widget extern) per respondre preguntes.</p>
+        <button class="btn" onclick="alert('Demo: aquí aniria el xat IA')">Obrir xat (demo)</button>
+      </div>
+    </section>
+
+    <section id="contacte">
+      <h2>Contacte</h2>
+      <div class="card">
+        <p>Correu: <a href="mailto:exemple@correu.cat">exemple@correu.cat</a></p>
+        <p>Formulari breu o enllaç a Google Forms.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2025 — Somatotips · <small class="muted">TDR</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
