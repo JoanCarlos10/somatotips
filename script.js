@@ -66,7 +66,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   dots.forEach((d,i)=> d.addEventListener('click', () => { idx = i; update(); }));
 
   // Autoplay (pausa en hover/focus)
-  function play(){ autoplay = setInterval(next, 5000); }
+  function play(){ autoplay = setInterval(next, 10000); }
   function stop(){ clearInterval(autoplay); }
   root.addEventListener('mouseenter', stop);
   root.addEventListener('mouseleave', play);
@@ -86,6 +86,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
