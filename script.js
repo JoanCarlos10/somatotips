@@ -3,11 +3,17 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
   
   const altura = parseInt(this.altura.value);
   const pes = parseInt(this.pes.value);
+  const genere = this.genere.value;
   const activitat = this.activitat.value;
 
   const imc = pes / ((altura / 100) ** 2);
   let resultat = "";
 
+ let cat;
+  if (imc < 18.5)      cat = "baix";
+  else if (imc < 25)   cat = "normal";
+  else                 cat = "alt";
+  
   if (imc < 18.5) {
     resultat = "Somatotip orientatiu: Ectomorf";
   } else if (imc < 25) {
@@ -86,6 +92,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
