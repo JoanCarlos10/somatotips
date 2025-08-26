@@ -1,32 +1,37 @@
 document.getElementById("form-somatotip").addEventListener("submit", function(e) {
   e.preventDefault();
-  
-  const altura = parseInt(this.altura.value);
-  const pes = parseInt(this.pes.value);
-  const genere = this.genere.value;
-  const activitat = this.activitat.value;
+
+  const altura = parseFloat(this.altura.value);  // cm
+  const pes = parseFloat(this.pes.value);        // kg
+  const edat = parseInt(this.edat.value, 10);    // anys
+  const activitat = this.activitat.value;        // info contextual
 
   const imc = pes / ((altura / 100) ** 2);
-  let resultat = "";
 
- let cat;
+  // Categoria IMC (adults)
+  let cat;
   if (imc < 18.5)      cat = "baix";
   else if (imc < 25)   cat = "normal";
   else                 cat = "alt";
-  
-  if (imc < 18.5) {
-    resultat = "Somatotip orientatiu: Ectomorf";
-  } else if (imc < 25) {
-    resultat = "Somatotip orientatiu: Mesomorf";
+
+  // Resultado visible: IMC + categoría
+  document.getElementById("resultat").textContent =
+    `IMC: ${imc.toFixed(1)} — ${cat} (activitat: ${activitat}).`;
+
+  // Explicación clara del IMC
+  document.getElementById("explicacio-imc").textContent =
+    "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada (pes/altura²). " +
+    "Serveix per estimar si el pes és per sota (baix), dins (normal) o per sobre (alt) del rang saludable en adults.";
+
+  // Nota según la edad
+  const nota = document.getElementById("nota");
+  if (edat < 18) {
+    nota.textContent = "Atenció: per a menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Pren aquest resultat com a orientatiu.";
   } else {
-    resultat = "Somatotip orientatiu: Endomorf";
+    nota.textContent = "Recorda: l'IMC no diferencia entre múscul i greix i pot no reflectir la composició corporal.";
   }
 
-  document.getElementById("resultat").textContent =
-    `${resultat} (IMC: ${imc.toFixed(1)}, activitat: ${activitat})`;
-
-  document.getElementById("explicacio-imc").textContent =
-    "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada. No té en compte la composició corporal (greix vs múscul).";
+  document.getElementById("panel-resultat").style.display = "block";
 });
 
 // Cerrar otros acordeones cuando se abre uno
@@ -92,6 +97,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
