@@ -120,43 +120,51 @@
 </section>
 
  <section id="formulari">
-      <h2>Formulari: quin és el teu somatotip?</h2>
-      <div class="card">
-        <form id="form-somatotip">
-          <div class="grid cols-3">
-            <div>
-              <label>Alçada (cm)</label>
-              <input type="number" name="altura" min="80" max="230" required>
-            </div>
-            <div>
-              <label>Pes (kg)</label>
-              <input type="number" name="pes" min="20" max="250" required>
-            </div>
-            <div>
-<div>
-  <label for="genere">Gènere</label>
-  <select name="genere" id="genere" required>
-    <option value="" disabled selected>Selecciona una opció</option>
-    <option value="Home">Home</option>
-    <option value="Dona">Dona</option>
-  </select>
-</div>
-
-            <div>
-              <label>Nivell d'activitat</label>
-              <select name="activitat">
-                <option>Baix</option>
-                <option>Mitjà</option>
-                <option>Alt</option>
-              </select>
-            </div>
-          </div>
-          <button type="submit">Calcular somatotip</button>
-          <p id="resultat" class="muted" style="margin-top:10px"></p>
-          <p id="explicacio-imc" class="muted" style="margin-top:6px; font-size: 0.9em;"></p>
-        </form>
+  <h2>Formulari: quin és el teu somatotip?</h2>
+  <div class="card">
+    <form id="form-somatotip" class="grid cols-4">
+      <div>
+        <label>Alçada (cm)</label>
+        <input type="number" name="altura" min="120" max="230" required>
       </div>
-    </section>
+      <div>
+        <label>Pes (kg)</label>
+        <input type="number" name="pes" min="30" max="250" required>
+      </div>
+      <div>
+        <label>Gènere</label>
+        <select name="genere" required>
+          <option value="" disabled selected>Selecciona una opció</option>
+          <option>Home</option>
+          <option>Dona</option>
+        </select>
+      </div>
+      <div>
+        <label>Edat (anys)</label>
+        <input type="number" name="edat" min="10" max="100" required>
+      </div>
+
+      <div>
+        <label>Nivell d'activitat</label>
+        <select name="activitat">
+          <option>Baix</option>
+          <option>Mitjà</option>
+          <option>Alt</option>
+        </select>
+      </div>
+
+      <div style="grid-column: 1 / -1">
+        <button type="submit">Calcular somatotip</button>
+      </div>
+    </form>
+
+    <div id="panel-resultat" style="margin-top:16px; display:none">
+      <p id="resultat" class="muted"></p>
+      <p id="explicacio-imc" class="muted" style="margin-top:6px; font-size:.95em;"></p>
+      <p id="nota" class="muted" style="font-size:.85em;"></p>
+    </div>
+  </div>
+</section>
     
     <section id="dietes">
       <h2>Taula de dietes ideals (demo)</h2>
@@ -227,6 +235,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
