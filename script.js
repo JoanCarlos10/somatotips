@@ -14,21 +14,28 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
   else if (imc < 25)   cat = "normal";
   else                 cat = "alt";
 
-  // Resultado visible: IMC + categoría
+  // Somatotip orientatiu segons IMC
+  let somatotip;
+  if (imc < 18.5)      somatotip = "Ectomorf";
+  else if (imc < 25)   somatotip = "Mesomorf";
+  else                 somatotip = "Endomorf";
+
+  // Mostrar resultado
   document.getElementById("resultat").textContent =
-    `IMC: ${imc.toFixed(1)} — ${cat} (activitat: ${activitat}).`;
+    `Resultat: IMC ${imc.toFixed(1)} → ${cat}. Somatotip orientatiu: ${somatotip} (activitat: ${activitat}).`;
 
   // Explicación clara del IMC
   document.getElementById("explicacio-imc").textContent =
     "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada (pes/altura²). " +
-    "Serveix per estimar si el pes és per sota (baix), dins (normal) o per sobre (alt) del rang saludable en adults.";
+    "Ajuda a estimar si el pes està per sota (baix), dins (normal) o per sobre (alt) del rang saludable en adults. " +
+    "A partir d'aquest valor, s'assigna un somatotip de manera aproximada.";
 
-  // Nota según la edad
+  // Nota segons l'edat
   const nota = document.getElementById("nota");
-  if (edat < 18) {
-    nota.textContent = "Atenció: per a menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Pren aquest resultat com a orientatiu.";
+  if (!isNaN(edat) && edat < 18) {
+    nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Pren aquest resultat només com a orientatiu.";
   } else {
-    nota.textContent = "Recorda: l'IMC no diferencia entre múscul i greix i pot no reflectir la composició corporal.";
+    nota.textContent = "Recorda: l'IMC no diferencia entre múscul i greix i pot no reflectir la composició corporal real.";
   }
 
   document.getElementById("panel-resultat").style.display = "block";
@@ -97,6 +104,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
