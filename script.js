@@ -22,16 +22,12 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
 
   // Mostrar resultado
   document.getElementById("resultat").textContent =
-    `Resultat: IMC ${imc.toFixed(1)} → ${cat}. 
-    Somatotip orientatiu: ${somatotip} 
-    (activitat: ${activitat}).`;
+    `Resultat: IMC ${imc.toFixed(1)} → ${cat}. Somatotip orientatiu: ${somatotip} (activitat: ${activitat}).`;
 
   // Explicación clara del IMC
   document.getElementById("explicacio-imc").textContent =
-    "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada (pes/altura²).
-    " +
-    "Ajuda a estimar si el pes està per sota (baix), dins (normal) o per sobre (alt) del rang saludable en adults. 
-    " +
+    "L'IMC (Índex de Massa Corporal) és una mesura orientativa que relaciona el pes amb l'alçada (pes/altura²)." +
+    "Ajuda a estimar si el pes està per sota (baix), dins (normal) o per sobre (alt) del rang saludable en adults. " +
     "A partir d'aquest valor, s'assigna un somatotip de manera aproximada.";
 
   // Nota segons l'edat
@@ -108,6 +104,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
