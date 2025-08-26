@@ -22,7 +22,9 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
 
   // Mostrar resultado
   document.getElementById("resultat").textContent =
-    `Resultat: IMC ${imc.toFixed(1)} → ${cat}. Somatotip orientatiu: ${somatotip} (activitat: ${activitat}).`;
+    `Resultat: IMC ${imc.toFixed(1)} → ${cat}. 
+    Somatotip orientatiu: ${somatotip} 
+    (activitat: ${activitat}).`;
 
   // Explicación clara del IMC
   document.getElementById("explicacio-imc").textContent =
@@ -104,6 +106,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
