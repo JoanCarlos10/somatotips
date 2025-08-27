@@ -47,8 +47,7 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
 const nota = document.getElementById("nota");
 const tablaHome = document.getElementById("tabla-home");
 const tablaDona = document.getElementById("tabla-dona");
-const genereSel = document.getElementById("genere"); // <-- importante
-const genere = genereSel ? genereSel.value : "";
+const genere = (document.getElementById("genere")?.value) || "";
 
 // helper: resaltar fila por edad
 function highlightAgeRow(table, age) {
@@ -60,23 +59,26 @@ function highlightAgeRow(table, age) {
 }
 
 if (!isNaN(edat) && edat < 18) {
-  nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
+  nota.textContent =
+    "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
 
   if (genere === "Dona") {
-    if (tablaDona) { tablaDona.style.display = "table"; highlightAgeRow(tablaDona, edat); }
-    if (tablaHome)  tablaHome.style.display  = "none";
+    tablaDona && (tablaDona.style.display = "table");
+    tablaHome && (tablaHome.style.display = "none");
+    highlightAgeRow(tablaDona, edat);
   } else if (genere === "Home") {
-    if (tablaHome)  { tablaHome.style.display = "table"; highlightAgeRow(tablaHome, edat); }
-    if (tablaDona)  tablaDona.style.display  = "none";
+    tablaHome && (tablaHome.style.display = "table");
+    tablaDona && (tablaDona.style.display = "none");
+    highlightAgeRow(tablaHome, edat);
   } else {
-    // Si aún no eligieron género, muestra ambas (opcional) o ninguna:
-    if (tablaHome)  tablaHome.style.display  = "table";
-    if (tablaDona)  tablaDona.style.display  = "table";
+    // Si aún no eligieron género, puedes mostrar ninguna o ambas. Aquí: ninguna.
+    tablaHome && (tablaHome.style.display = "none");
+    tablaDona && (tablaDona.style.display = "none");
   }
 } else {
   nota.textContent = "";
-  if (tablaHome)  tablaHome.style.display  = "none";
-  if (tablaDona)  tablaDona.style.display  = "none";
+  tablaHome && (tablaHome.style.display = "none");
+  tablaDona && (tablaDona.style.display = "none");
 }
 
     document.getElementById("panel-resultat").style.display = "block";
@@ -151,6 +153,20 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
+// Opcional: cambiar tabla al cambiar "Gènere" si ja han posat edat < 18
+const genereSel = document.getElementById("genere");
+if (genereSel) {
+  genereSel.addEventListener("change", () => {
+    const edatInput = document.querySelector('input[name="edat"]');
+    const edatVal = parseInt(edatInput?.value || "", 10);
+    if (!isNaN(edatVal) && edatVal < 18) {
+      // Recalcula para mostrar la tabla correcta sin recargar
+      document.getElementById("form-somatotip")
+        .dispatchEvent(new Event("submit", { cancelable: true }));
+    }
+  });
+}
 
 
 
