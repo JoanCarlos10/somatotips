@@ -212,6 +212,55 @@ document.getElementById("dietes-form")?.addEventListener("submit", function(e){
   out.style.display = "block";
 });
 
+// TEST DE VIDA (verás el texto del botón cambiar una vez al cargar)
+const _btnDietes = document.getElementById("dietes-btn");
+if (_btnDietes) _btnDietes.textContent = "Calcula calories i macros";
+
+document.getElementById("dietes-form")?.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const pes = parseFloat(this.pes.value);
+  const activitat = this.activitat.value;   // baix | mig | alt
+  const objectiu = this.objectiu.value;     // perdre | mantenir | guanyar
+  if (isNaN(pes)) return;
+
+  // Manteniment aproximat (kcal/kg segons activitat)
+  const factorAct = activitat === "baix" ? 22 : activitat === "mig" ? 26 : 30;
+  const kcalMant = pes * factorAct;
+
+  // Ajust segons objectiu
+  const kcalObj = Math.round(
+    objectiu === "perdre" ? kcalMant * 0.85 :
+    objectiu === "guanyar" ? kcalMant * 1.15 :
+    kcalMant
+  );
+
+  // Macros orientatius
+  let pProt = 0.25, pGreix = 0.30, pHid = 0.45;
+  if (objectiu === "perdre")  { pProt = 0.30; pGreix = 0.30; pHid = 0.40; }
+  if (objectiu === "guanyar") { pProt = 0.25; pGreix = 0.25; pHid = 0.50; }
+
+  const kcalProt = Math.round(kcalObj * pProt);
+  const kcalGreix = Math.round(kcalObj * pGreix);
+  const kcalHid  = Math.round(kcalObj * pHid);
+
+  const gProt = Math.round(kcalProt / 4);
+  const gHid  = Math.round(kcalHid  / 4);
+  const gGreix= Math.round(kcalGreix/ 9);
+
+  document.getElementById("dietes-kcal").textContent =
+    `Objectiu: ${objectiu}. Calories diàries estimades: ${kcalObj.toLocaleString()} kcal ` +
+    `(manteniment ~${Math.round(kcalMant).toLocaleString()} kcal).`;
+
+  document.getElementById("dietes-macros").innerHTML = `
+    <li>Proteïnes: ${gProt} g/dia (~${kcalProt} kcal)</li>
+    <li>Hidrats de carboni: ${gHid} g/dia (~${kcalHid} kcal)</li>
+    <li>Greixos: ${gGreix} g/dia (~${kcalGreix} kcal)</li>
+  `;
+
+  document.getElementById("dietes-resultat").style.display = "block";
+});
+
 
 
 
