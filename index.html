@@ -160,44 +160,44 @@
       <p id="resultat" class="muted"></p>
       <p id="tip" class="tip"></p>
       <p id="explicacio-imc" class="muted" style="margin-top:6px; font-size:.95em;"></p>
-      <p id="nota" class="muted" style="font-size:.85em;"></p>
-      <!-- Debajo de <p id="nota"> ... -->
-<!-- TAULA MENORS: HOME -->
-<table id="tabla-home" class="tabla-imc-menors" style="display:none">
-  <thead>
-    <tr><th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>10 anys</td><td>&lt; 14.5</td><td>14.5 – 20.0</td><td>&gt; 20.0</td></tr>
-    <tr><td>11 anys</td><td>&lt; 15.0</td><td>15.0 – 20.7</td><td>&gt; 20.7</td></tr>
-    <tr><td>12 anys</td><td>&lt; 15.5</td><td>15.5 – 21.5</td><td>&gt; 21.5</td></tr>
-    <tr><td>13 anys</td><td>&lt; 16.0</td><td>16.0 – 22.2</td><td>&gt; 22.2</td></tr>
-    <tr><td>14 anys</td><td>&lt; 16.5</td><td>16.5 – 23.0</td><td>&gt; 23.0</td></tr>
-    <tr><td>15 anys</td><td>&lt; 17.0</td><td>17.0 – 23.7</td><td>&gt; 23.7</td></tr>
-    <tr><td>16 anys</td><td>&lt; 17.5</td><td>17.5 – 24.0</td><td>&gt; 24.0</td></tr>
-    <tr><td>17 anys</td><td>&lt; 18.0</td><td>18.0 – 24.5</td><td>&gt; 24.5</td></tr>
-  </tbody>
-</table>
+<details id="nota-details" style="display:none">
+  <summary id="nota-summary">Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Fes clic per veure la taula orientativa ▼</summary>
+  
+  <!-- TAULA MENORS: HOME -->
+  <table id="tabla-home" class="tabla-imc-menors" style="display:none">
+    <thead>
+      <tr><th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>10 anys</td><td>&lt; 14.5</td><td>14.5 – 20.0</td><td>&gt; 20.0</td></tr>
+      <tr><td>11 anys</td><td>&lt; 15.0</td><td>15.0 – 20.7</td><td>&gt; 20.7</td></tr>
+      <tr><td>12 anys</td><td>&lt; 15.5</td><td>15.5 – 21.5</td><td>&gt; 21.5</td></tr>
+      <tr><td>13 anys</td><td>&lt; 16.0</td><td>16.0 – 22.2</td><td>&gt; 22.2</td></tr>
+      <tr><td>14 anys</td><td>&lt; 16.5</td><td>16.5 – 23.0</td><td>&gt; 23.0</td></tr>
+      <tr><td>15 anys</td><td>&lt; 17.0</td><td>17.0 – 23.7</td><td>&gt; 23.7</td></tr>
+      <tr><td>16 anys</td><td>&lt; 17.5</td><td>17.5 – 24.0</td><td>&gt; 24.0</td></tr>
+      <tr><td>17 anys</td><td>&lt; 18.0</td><td>18.0 – 24.5</td><td>&gt; 24.5</td></tr>
+    </tbody>
+  </table>
 
-<!-- TAULA MENORS: DONA -->
-<table id="tabla-dona" class="tabla-imc-menors" style="display:none">
-  <thead>
-    <tr><th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>10 anys</td><td>&lt; 14.2</td><td>14.2 – 19.8</td><td>&gt; 19.8</td></tr>
-    <tr><td>11 anys</td><td>&lt; 14.8</td><td>14.8 – 20.6</td><td>&gt; 20.6</td></tr>
-    <tr><td>12 anys</td><td>&lt; 15.4</td><td>15.4 – 21.3</td><td>&gt; 21.3</td></tr>
-    <tr><td>13 anys</td><td>&lt; 16.0</td><td>16.0 – 22.0</td><td>&gt; 22.0</td></tr>
-    <tr><td>14 anys</td><td>&lt; 16.6</td><td>16.6 – 22.8</td><td>&gt; 22.8</td></tr>
-    <tr><td>15 anys</td><td>&lt; 17.2</td><td>17.2 – 23.5</td><td>&gt; 23.5</td></tr>
-    <tr><td>16 anys</td><td>&lt; 17.6</td><td>17.6 – 24.0</td><td>&gt; 24.0</td></tr>
-    <tr><td>17 anys</td><td>&lt; 17.9</td><td>17.9 – 24.3</td><td>&gt; 24.3</td></tr>
-  </tbody>
-</table>
- </div><!-- /#panel-resultat -->
-  </div><!-- /.card -->
-</section><!-- /#formulari -->
+  <!-- TAULA MENORS: DONA -->
+  <table id="tabla-dona" class="tabla-imc-menors" style="display:none">
+    <thead>
+      <tr><th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>10 anys</td><td>&lt; 14.2</td><td>14.2 – 19.8</td><td>&gt; 19.8</td></tr>
+      <tr><td>11 anys</td><td>&lt; 14.8</td><td>14.8 – 20.6</td><td>&gt; 20.6</td></tr>
+      <tr><td>12 anys</td><td>&lt; 15.4</td><td>15.4 – 21.3</td><td>&gt; 21.3</td></tr>
+      <tr><td>13 anys</td><td>&lt; 16.0</td><td>16.0 – 22.0</td><td>&gt; 22.0</td></tr>
+      <tr><td>14 anys</td><td>&lt; 16.6</td><td>16.6 – 22.8</td><td>&gt; 22.8</td></tr>
+      <tr><td>15 anys</td><td>&lt; 17.2</td><td>17.2 – 23.5</td><td>&gt; 23.5</td></tr>
+      <tr><td>16 anys</td><td>&lt; 17.6</td><td>17.6 – 24.0</td><td>&gt; 24.0</td></tr>
+      <tr><td>17 anys</td><td>&lt; 17.9</td><td>17.9 – 24.3</td><td>&gt; 24.3</td></tr>
+    </tbody>
+  </table>
+</details>
+
     
     <section id="dietes">
       <h2>Taula de dietes ideals (demo)</h2>
@@ -268,6 +268,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
