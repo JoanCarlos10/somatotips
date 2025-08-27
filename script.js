@@ -60,7 +60,6 @@ function highlightAgeRow(table, age) {
 
 if (!isNaN(edat) && edat < 18) {
   notaDetails.style.display = "block"; // mostrar acordeón
-  notaDetails.open = false;            // cerrado por defecto cada cálculo
 
   if (genere === "Dona") {
     tablaDona.style.display = "table";
@@ -164,6 +163,7 @@ if (genereSel) {
     }
   });
 }
+
 
 
 
