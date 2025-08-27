@@ -164,6 +164,54 @@ if (genereSel) {
   });
 }
 
+// Calculadora de dietes (simple i orientativa)
+document.getElementById("dietes-form")?.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const pes = parseFloat(this.pes.value);
+  const activitat = this.activitat.value;   // baix | mig | alt
+  const objectiu = this.objectiu.value;     // perdre | mantenir | guanyar
+  if (isNaN(pes)) return;
+
+  // Estimació ràpida de manteniment per kg segons activitat
+  // baix ~22 kcal/kg, mig ~26, alt ~30
+  const factorAct = activitat === "baix" ? 22 : activitat === "mig" ? 26 : 30;
+  let kcalMant = pes * factorAct;
+
+  // Ajust per objectiu: -15% perdre, 0% mantenir, +15% guanyar
+  let kcalObj = Math.round(
+    objectiu === "perdre" ? kcalMant * 0.85 :
+    objectiu === "guanyar" ? kcalMant * 1.15 :
+    kcalMant
+  );
+
+  // Macros orientatius (percentatges simples)
+  let pProt = 0.25, pGreix = 0.30, pHid = 0.45;
+  if (objectiu === "perdre") { pProt = 0.30; pGreix = 0.30; pHid = 0.40; }
+  if (objectiu === "guanyar") { pProt = 0.25; pGreix = 0.25; pHid = 0.50; }
+
+  const kcalProt = Math.round(kcalObj * pProt);
+  const kcalGreix = Math.round(kcalObj * pGreix);
+  const kcalHid = Math.round(kcalObj * pHid);
+  // grams aproximats (4 kcal/g proteïna i hidrats, 9 kcal/g greix)
+  const gProt = Math.round(kcalProt / 4);
+  const gHid = Math.round(kcalHid / 4);
+  const gGreix = Math.round(kcalGreix / 9);
+
+  const out = document.getElementById("dietes-resultat");
+  document.getElementById("dietes-kcal").textContent =
+    `Objectiu: ${objectiu}. Estimació de calories diàries: ${kcalObj.toLocaleString()} kcal (manteniment aprox. ${Math.round(kcalMant).toLocaleString()} kcal).`;
+
+  const list = document.getElementById("dietes-macros");
+  list.innerHTML = `
+    <li>Proteïnes: ${gProt} g/dia (~${kcalProt} kcal)</li>
+    <li>Hidrats de carboni: ${gHid} g/dia (~${kcalHid} kcal)</li>
+    <li>Greixos: ${gGreix} g/dia (~${kcalGreix} kcal)</li>
+  `;
+
+  out.style.display = "block";
+});
+
 
 
 
