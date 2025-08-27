@@ -20,15 +20,24 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
   else if (imc < 25)   somatotip = "Mesomorf";
   else                 somatotip = "Endomorf";
 
-  // Tip segons categoria
-  let tip = "";
-  if (cat === "baix") {
-    tip = "Consell: IMC baix, et recomanem que guanyis pes de forma saludable.";
-  } else if (cat === "alt") {
-    tip = "Consell: IMC alt, intenta mantenir hàbits saludables i controlar el pes.";
-  } else {
-    tip = "El teu IMC és dins del rang normal. Mantén hàbits actius i alimentació equilibrada.";
-  }
+// Tip segons categoria (text + classe de color)
+const tipEl = document.getElementById("tip");
+let tipText = "";
+let tipClass = "normal";
+
+if (cat === "baix") {
+  tipText = "Consell: IMC baix, et recomanem que guanyis pes de forma saludable.";
+  tipClass = "baix";
+} else if (cat === "alt") {
+  tipText = "Consell: IMC alt, intenta mantenir hàbits saludables i controlar el pes.";
+  tipClass = "alt";
+} else {
+  tipText = "El teu IMC és dins del rang normal. Mantén hàbits actius i alimentació equilibrada.";
+  tipClass = "normal";
+}
+
+tipEl.textContent = tipText;
+tipEl.className = "tip " + tipClass;
 
   // Mostrar resultat
   document.getElementById("resultat").textContent =
@@ -116,6 +125,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
