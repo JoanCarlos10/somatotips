@@ -387,3 +387,24 @@ section {
   background: #f1f5f9;
   font-weight: 600;
 }
+
+/* Taules IMC per a menors */
+.tabla-imc-menors {
+  margin-top: 12px;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 640px;
+}
+.tabla-imc-menors th, .tabla-imc-menors td {
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  text-align: center;
+}
+.tabla-imc-menors th {
+  background: #f1f5f9;
+  font-weight: 600;
+}
+.tabla-imc-menors tr.hl td {
+  background: #fff7ed; /* resalta la fila de la edat */
+  font-weight: 600;
+}
