@@ -369,3 +369,21 @@ section {
 .tip.normal { color: #166534; } /* verde */
 .tip.baix   { color: #b45309; } /* ámbar */
 .tip.alt    { color: #b91c1c; } /* rojo */
+
+/* Taula orientativa IMC per a menors */
+.tabla-imc-menors {
+  margin-top: 12px;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 640px;
+}
+.tabla-imc-menors th,
+.tabla-imc-menors td {
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  text-align: center;
+}
+.tabla-imc-menors th {
+  background: #f1f5f9;
+  font-weight: 600;
+}
