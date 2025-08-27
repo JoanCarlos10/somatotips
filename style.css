@@ -334,3 +334,24 @@ section {
 @media (max-width: 560px) {
   .grid.cols-4 { grid-template-columns: 1fr; }
 }
+
+/* Formulario en columna */
+.form-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* espacio entre campos */
+}
+
+.form-vertical label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.form-vertical input,
+.form-vertical select,
+.form-vertical button {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+}
