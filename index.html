@@ -208,37 +208,78 @@
 </section><!-- cierra #formulari -->
     
     <section id="dietes">
-      <h2>Taula de dietes ideals (demo)</h2>
-      <div class="card">
-        <p>Taula orientativa per objectius (pèrdua de pes, manteniment, guany muscular). Més endavant podem generar una taula real amb valors.</p>
-        <div class="grid cols-3">
-          <div class="card">
-            <strong>Pèrdua de pes</strong>
-            <ul>
-              <li>Déficit lleu de calories</li>
-              <li>+ verdures, + proteïna</li>
-              <li>Restringir ultraprocessats</li>
-            </ul>
-          </div>
-          <div class="card">
-            <strong>Manteniment</strong>
-            <ul>
-              <li>Equilibri macro</li>
-              <li>Hàbits sostenibles</li>
-              <li>Activitat regular</li>
-            </ul>
-          </div>
-          <div class="card">
-            <strong>Guany muscular</strong>
-            <ul>
-              <li>Lleuger superàvit calòric</li>
-              <li>Proteïna 1.6–2.2 g/kg</li>
-              <li>Força 3–5 dies/setmana</li>
-            </ul>
-          </div>
-        </div>
+  <h2>Taula de dietes ideals (orientatiu)</h2>
+
+  <div class="card">
+    <!-- Calculadora ràpida -->
+    <form id="dietes-form" class="grid cols-3">
+      <div>
+        <label>Pes (kg)</label>
+        <input type="number" name="pes" min="30" max="250" required>
       </div>
-    </section>
+      <div>
+        <label>Nivell d'activitat</label>
+        <select name="activitat">
+          <option value="baix">Baix (poc moviment)</option>
+          <option value="mig" selected>Mitjà (3-4 dies/ setmana)</option>
+          <option value="alt">Alt (5+ dies/ setmana)</option>
+        </select>
+      </div>
+      <div>
+        <label>Objectiu</label>
+        <select name="objectiu">
+          <option value="perdre">Pèrdua de pes</option>
+          <option value="mantenir" selected>Manteniment</option>
+          <option value="guanyar">Guany muscular</option>
+        </select>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <button type="submit">Calcula calories i macros</button>
+      </div>
+    </form>
+
+    <!-- Resultats -->
+    <div id="dietes-resultat" style="display:none; margin-top:12px">
+      <p id="dietes-kcal" class="muted"></p>
+      <ul id="dietes-macros" class="dietes-macros"></ul>
+      <p class="muted" style="font-size:.85em">
+        * Estimació simple: orientativa per al TDR. No substitueix l’assessorament d’un/a dietista-nutricionista.
+      </p>
+    </div>
+  </div>
+
+  <!-- Idees de menú (exemples curts) -->
+  <div class="grid cols-3" style="margin-top:14px">
+    <div class="card">
+      <h3>Pèrdua de pes</h3>
+      <ul class="bullets">
+        <li>Esmorzar: iogurt + civada + fruita</li>
+        <li>Dinar: pit de pollastre + amanida + pa integral</li>
+        <li>Sopar: truita + verdures saltejades</li>
+        <li>Snacks: fruita / fruits secs (petites racions)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Manteniment</h3>
+      <ul class="bullets">
+        <li>Esmorzar: llet o beguda vegetal + torrades integrals + fruita</li>
+        <li>Dinar: arròs integral + peix blau + amanida</li>
+        <li>Sopar: llegums (llenties/cigrons) + verdures</li>
+        <li>Snacks: iogurt / formatge tendre / fruita</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Guany muscular</h3>
+      <ul class="bullets">
+        <li>Esmorzar: truita + pa integral + fruita</li>
+        <li>Dinar: pasta integral + carn magra + verdures</li>
+        <li>Sopar: arròs + tonyina/ous + amanida</li>
+        <li>Snacks: iogurt grec / batut de llet i fruita</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
     <section id="imatges">
       <h2>Imatges i gràfics</h2>
@@ -276,6 +317,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
