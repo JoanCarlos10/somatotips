@@ -361,3 +361,11 @@ section {
   padding: 10px;
   font-weight: 600;
 }
+
+.tip {
+  margin-top: 6px;
+  font-weight: 600;
+}
+.tip.normal { color: #166534; } /* verde */
+.tip.baix   { color: #b45309; } /* ámbar */
+.tip.alt    { color: #b91c1c; } /* rojo */
