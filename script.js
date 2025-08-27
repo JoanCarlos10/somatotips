@@ -44,12 +44,12 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
       "Serveix per estimar si el pes és baix, normal o alt en adults.";
 
     // Menors: nota + taula segons gènere
-const nota = document.getElementById("nota");
+const notaDetails = document.getElementById("nota-details");
 const tablaHome = document.getElementById("tabla-home");
 const tablaDona = document.getElementById("tabla-dona");
 const genere = (document.getElementById("genere")?.value) || "";
 
-// helper: resaltar fila por edad
+// helper: resaltar fila de la edad
 function highlightAgeRow(table, age) {
   if (!table) return;
   table.querySelectorAll("tbody tr").forEach(tr => tr.classList.remove("hl"));
@@ -59,26 +59,23 @@ function highlightAgeRow(table, age) {
 }
 
 if (!isNaN(edat) && edat < 18) {
-  nota.textContent =
-    "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
+  notaDetails.style.display = "block"; // mostrar acordeón
+  notaDetails.open = false;            // cerrado por defecto cada cálculo
 
   if (genere === "Dona") {
-    tablaDona && (tablaDona.style.display = "table");
-    tablaHome && (tablaHome.style.display = "none");
+    tablaDona.style.display = "table";
+    tablaHome.style.display = "none";
     highlightAgeRow(tablaDona, edat);
   } else if (genere === "Home") {
-    tablaHome && (tablaHome.style.display = "table");
-    tablaDona && (tablaDona.style.display = "none");
+    tablaHome.style.display = "table";
+    tablaDona.style.display = "none";
     highlightAgeRow(tablaHome, edat);
   } else {
-    // Si aún no eligieron género, puedes mostrar ninguna o ambas. Aquí: ninguna.
-    tablaHome && (tablaHome.style.display = "none");
-    tablaDona && (tablaDona.style.display = "none");
+    tablaHome.style.display = "none";
+    tablaDona.style.display = "none";
   }
 } else {
-  nota.textContent = "";
-  tablaHome && (tablaHome.style.display = "none");
-  tablaDona && (tablaDona.style.display = "none");
+  notaDetails.style.display = "none"; // ocultar acordeón si es mayor de edad
 }
 
     document.getElementById("panel-resultat").style.display = "block";
@@ -167,6 +164,7 @@ if (genereSel) {
     }
   });
 }
+
 
 
 
