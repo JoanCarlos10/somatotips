@@ -133,11 +133,11 @@
   </div>
   <div>
     <label>Gènere</label>
-    <select name="genere" required>
-      <option value="" disabled selected>Selecciona una opció</option>
-      <option>Home</option>
-      <option>Dona</option>
-    </select>
+   <select name="genere" id="genere" required>
+  <option value="" disabled selected>Selecciona una opció</option>
+  <option value="Home">Home</option>
+  <option value="Dona">Dona</option>
+</select>
   </div>
   <div>
     <label>Edat (anys)</label>
@@ -162,12 +162,10 @@
       <p id="explicacio-imc" class="muted" style="margin-top:6px; font-size:.95em;"></p>
       <p id="nota" class="muted" style="font-size:.85em;"></p>
       <!-- Debajo de <p id="nota"> ... -->
-<!-- TAULA PER A MENORS: HOME -->
-<table class="tabla-imc-menors tabla-home" style="display:none">
+<!-- TAULA MENORS: HOME -->
+<table id="tabla-home" class="tabla-imc-menors" style="display:none">
   <thead>
-    <tr>
-      <th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th>
-    </tr>
+    <tr><th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th></tr>
   </thead>
   <tbody>
     <tr><td>10 anys</td><td>&lt; 14.5</td><td>14.5 – 20.0</td><td>&gt; 20.0</td></tr>
@@ -181,12 +179,10 @@
   </tbody>
 </table>
 
-<!-- TAULA PER A MENORS: DONA -->
-<table class="tabla-imc-menors tabla-dona" style="display:none">
+<!-- TAULA MENORS: DONA -->
+<table id="tabla-dona" class="tabla-imc-menors" style="display:none">
   <thead>
-    <tr>
-      <th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th>
-    </tr>
+    <tr><th>Edat</th><th>IMC baix</th><th>IMC normal</th><th>IMC alt</th></tr>
   </thead>
   <tbody>
     <tr><td>10 anys</td><td>&lt; 14.2</td><td>14.2 – 19.8</td><td>&gt; 19.8</td></tr>
@@ -272,6 +268,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
