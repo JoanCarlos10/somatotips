@@ -50,19 +50,45 @@ tipEl.className = "tip " + tipClass;
 
   // Nota i taula per a menors
   const nota = document.getElementById("nota");
-  const tablaMenors = document.querySelector(".tabla-imc-menors");
+const tablaHome = document.querySelector(".tabla-home");
+const tablaDona = document.querySelector(".tabla-dona");
 
-  if (!isNaN(edat) && edat < 18) {
-    nota.textContent =
-      "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
-    if (tablaMenors) tablaMenors.style.display = "table";
+// helper para resaltar fila de la edad
+function highlightAgeRow(table, age) {
+  if (!table) return;
+  // Quitar resaltados previos
+  table.querySelectorAll("tbody tr").forEach(tr => tr.classList.remove("hl"));
+  // Buscar fila que empieza por "NN anys"
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+  const target = rows.find(tr => (tr.cells[0]?.textContent || "").trim().startsWith(`${age} anys`));
+  if (target) target.classList.add("hl");
+}
+
+if (!isNaN(edat) && edat < 18) {
+  // Mostrar nota y la tabla por género
+  nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
+
+  // Mostrar/ocultar según género seleccionado
+  const genereSelect = document.querySelector('select[name="genere"]');
+  const genere = genereSelect ? genereSelect.value : "";
+
+  if (genere === "Dona") {
+    if (tablaDona) tablaDona.style.display = "table";
+    if (tablaHome) tablaHome.style.display = "none";
+    highlightAgeRow(tablaDona, edat);
   } else {
-    nota.textContent = "";
-    if (tablaMenors) tablaMenors.style.display = "none";
+    // Por defecto mostramos "Home" si no han elegido o han puesto "Home"
+    if (tablaHome) tablaHome.style.display = "table";
+    if (tablaDona) tablaDona.style.display = "none";
+    highlightAgeRow(tablaHome, edat);
   }
+} else {
+  // Adult o sin edad: ocultar ambas tablas
+  nota.textContent = "";
+  if (tablaHome) tablaHome.style.display = "none";
+  if (tablaDona) tablaDona.style.display = "none";
+}
 
-  document.getElementById("panel-resultat").style.display = "block";
-});
 
 // Cerrar otros acordeones cuando se abre uno
 document.querySelectorAll('#faq details').forEach((det) => {
@@ -127,6 +153,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
