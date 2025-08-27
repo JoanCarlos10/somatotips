@@ -39,28 +39,30 @@ if (cat === "baix") {
 tipEl.textContent = tipText;
 tipEl.className = "tip " + tipClass;
 
-  // Mostrar resultat
+   // Mostrar resultat
   document.getElementById("resultat").textContent =
     `Resultat: IMC ${imc.toFixed(1)} → ${cat}`;
 
   document.getElementById("explicacio-imc").innerHTML =
-  `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br><br>` +
-  "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
-  "Serveix per estimar si el pes és baix, normal o alt en adults.";
+    `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br><br>` +
+    "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
+    "Serveix per estimar si el pes és baix, normal o alt en adults.";
 
-
-  // Nota segons l'edat
+  // Nota i taula per a menors
   const nota = document.getElementById("nota");
+  const tablaMenors = document.querySelector(".tabla-imc-menors");
+
   if (!isNaN(edat) && edat < 18) {
     nota.textContent =
-      "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Pren aquest resultat només com a orientatiu.";
+      "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
+    if (tablaMenors) tablaMenors.style.display = "table";
   } else {
     nota.textContent = "";
+    if (tablaMenors) tablaMenors.style.display = "none";
   }
 
   document.getElementById("panel-resultat").style.display = "block";
 });
-
 
 // Cerrar otros acordeones cuando se abre uno
 document.querySelectorAll('#faq details').forEach((det) => {
@@ -125,6 +127,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
