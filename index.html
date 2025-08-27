@@ -211,7 +211,7 @@
   <h2>Taula de dietes ideals (orientatiu)</h2>
 
   <div class="card">
-    <!-- Calculadora ràpida -->
+    <!-- Calculadora -->
     <form id="dietes-form" class="grid cols-3">
       <div>
         <label>Pes (kg)</label>
@@ -220,9 +220,9 @@
       <div>
         <label>Nivell d'activitat</label>
         <select name="activitat">
-          <option value="baix">Baix (poc moviment)</option>
-          <option value="mig" selected>Mitjà (3-4 dies/ setmana)</option>
-          <option value="alt">Alt (5+ dies/ setmana)</option>
+          <option value="baix">Baix</option>
+          <option value="mig" selected>Mitjà</option>
+          <option value="alt">Alt</option>
         </select>
       </div>
       <div>
@@ -235,47 +235,47 @@
       </div>
 
       <div style="grid-column:1/-1">
-        <button type="submit">Calcula calories i macros</button>
+        <button type="submit" id="dietes-btn">Calcula calories i macros</button>
       </div>
     </form>
 
-    <!-- Resultats -->
+    <!-- Resultados -->
     <div id="dietes-resultat" style="display:none; margin-top:12px">
       <p id="dietes-kcal" class="muted"></p>
       <ul id="dietes-macros" class="dietes-macros"></ul>
       <p class="muted" style="font-size:.85em">
-        * Estimació simple: orientativa per al TDR. No substitueix l’assessorament d’un/a dietista-nutricionista.
+        * Estimació simple i orientativa per al TDR. No substitueix l’assessorament d’un/a dietista-nutricionista.
       </p>
     </div>
   </div>
 
-  <!-- Idees de menú (exemples curts) -->
+  <!-- Ideas de menú (ejemplos) -->
   <div class="grid cols-3" style="margin-top:14px">
     <div class="card">
       <h3>Pèrdua de pes</h3>
       <ul class="bullets">
-        <li>Esmorzar: iogurt + civada + fruita</li>
-        <li>Dinar: pit de pollastre + amanida + pa integral</li>
-        <li>Sopar: truita + verdures saltejades</li>
-        <li>Snacks: fruita / fruits secs (petites racions)</li>
+        <li>Iogurt + civada + fruita</li>
+        <li>Pollastre + amanida + pa integral</li>
+        <li>Truita + verdures</li>
+        <li>Snacks: fruita / fruits secs</li>
       </ul>
     </div>
     <div class="card">
       <h3>Manteniment</h3>
       <ul class="bullets">
-        <li>Esmorzar: llet o beguda vegetal + torrades integrals + fruita</li>
-        <li>Dinar: arròs integral + peix blau + amanida</li>
-        <li>Sopar: llegums (llenties/cigrons) + verdures</li>
-        <li>Snacks: iogurt / formatge tendre / fruita</li>
+        <li>Llet o vegetal + torrades integrals + fruita</li>
+        <li>Arròs integral + peix blau + amanida</li>
+        <li>Llegums + verdures</li>
+        <li>Snacks: iogurt / formatge tendre</li>
       </ul>
     </div>
     <div class="card">
       <h3>Guany muscular</h3>
       <ul class="bullets">
-        <li>Esmorzar: truita + pa integral + fruita</li>
-        <li>Dinar: pasta integral + carn magra + verdures</li>
-        <li>Sopar: arròs + tonyina/ous + amanida</li>
-        <li>Snacks: iogurt grec / batut de llet i fruita</li>
+        <li>Truita + pa integral + fruita</li>
+        <li>Pasta integral + carn magra + verdures</li>
+        <li>Arròs + tonyina/ous + amanida</li>
+        <li>Snacks: iogurt grec / batut</li>
       </ul>
     </div>
   </div>
@@ -317,6 +317,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
