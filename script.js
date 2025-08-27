@@ -44,33 +44,40 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
       "Serveix per estimar si el pes és baix, normal o alt en adults.";
 
     // Menors: nota + taula segons gènere
-    const nota = document.getElementById("nota");
-    const tablaHome = document.querySelector(".tabla-home");
-    const tablaDona = document.querySelector(".tabla-dona");
-    const genere = (this.genere && this.genere.value) || "Home";
+const nota = document.getElementById("nota");
+const tablaHome = document.getElementById("tabla-home");
+const tablaDona = document.getElementById("tabla-dona");
+const genereSel = document.getElementById("genere"); // <-- importante
+const genere = genereSel ? genereSel.value : "";
 
-    function highlightAgeRow(table, age) {
-      if (!table) return;
-      table.querySelectorAll("tbody tr").forEach(tr => tr.classList.remove("hl"));
-      const rows = Array.from(table.querySelectorAll("tbody tr"));
-      const target = rows.find(tr => (tr.cells[0]?.textContent || "").trim().startsWith(`${age} anys`));
-      if (target) target.classList.add("hl");
-    }
+// helper: resaltar fila por edad
+function highlightAgeRow(table, age) {
+  if (!table) return;
+  table.querySelectorAll("tbody tr").forEach(tr => tr.classList.remove("hl"));
+  const target = Array.from(table.querySelectorAll("tbody tr"))
+    .find(tr => (tr.cells[0]?.textContent || "").trim().startsWith(`${age} anys`));
+  if (target) target.classList.add("hl");
+}
 
-    if (!isNaN(edat) && edat < 18) {
-      nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
-      if (genere === "Dona") {
-        if (tablaDona) { tablaDona.style.display = "table"; highlightAgeRow(tablaDona, edat); }
-        if (tablaHome)  tablaHome.style.display  = "none";
-      } else {
-        if (tablaHome)  { tablaHome.style.display = "table"; highlightAgeRow(tablaHome, edat); }
-        if (tablaDona)  tablaDona.style.display  = "none";
-      }
-    } else {
-      nota.textContent = "";
-      if (tablaHome)  tablaHome.style.display  = "none";
-      if (tablaDona)  tablaDona.style.display  = "none";
-    }
+if (!isNaN(edat) && edat < 18) {
+  nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
+
+  if (genere === "Dona") {
+    if (tablaDona) { tablaDona.style.display = "table"; highlightAgeRow(tablaDona, edat); }
+    if (tablaHome)  tablaHome.style.display  = "none";
+  } else if (genere === "Home") {
+    if (tablaHome)  { tablaHome.style.display = "table"; highlightAgeRow(tablaHome, edat); }
+    if (tablaDona)  tablaDona.style.display  = "none";
+  } else {
+    // Si aún no eligieron género, muestra ambas (opcional) o ninguna:
+    if (tablaHome)  tablaHome.style.display  = "table";
+    if (tablaDona)  tablaDona.style.display  = "table";
+  }
+} else {
+  nota.textContent = "";
+  if (tablaHome)  tablaHome.style.display  = "none";
+  if (tablaDona)  tablaDona.style.display  = "none";
+}
 
     document.getElementById("panel-resultat").style.display = "block";
   } catch (err) {
@@ -144,6 +151,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
