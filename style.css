@@ -448,3 +448,15 @@ section {
   background: #fff7ed; /* resalta la fila de esa edad */
   font-weight: 600;
 }
+
+#nota-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+}
+#nota-details[open] summary::after {
+  content: " ▲";
+}
+#nota-details summary::after {
+  content: " ▼";
+}
