@@ -1,93 +1,84 @@
 document.getElementById("form-somatotip").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const altura = parseFloat(this.altura.value);   // cm
-  const pes = parseFloat(this.pes.value);         // kg
-  const edat = parseInt(this.edat.value, 10);     // anys
-  const activitat = this.activitat.value;         // Baix | Mitjà | Alt
+  try {
+    const altura = parseFloat(this.altura.value);   // cm
+    const pes = parseFloat(this.pes.value);         // kg
+    const edat = parseInt(this.edat.value, 10);     // anys
+    const activitat = this.activitat.value || "—";
 
-  const imc = pes / ((altura / 100) ** 2);
+    if (isNaN(altura) || isNaN(pes)) {
+      alert("Omple l'alçada i el pes correctament.");
+      return;
+    }
 
-  // Categoria IMC
-  let cat;
-  if (imc < 18.5)      cat = "baix";
-  else if (imc < 25)   cat = "normal";
-  else                 cat = "alt";
+    const imc = pes / ((altura / 100) ** 2);
 
-  // Somatotip orientatiu segons IMC
-  let somatotip;
-  if (imc < 18.5)      somatotip = "Ectomorf";
-  else if (imc < 25)   somatotip = "Mesomorf";
-  else                 somatotip = "Endomorf";
+    // Categoria IMC
+    let cat;
+    if (imc < 18.5)      cat = "baix";
+    else if (imc < 25)   cat = "normal";
+    else                 cat = "alt";
 
-// Tip segons categoria (text + classe de color)
-const tipEl = document.getElementById("tip");
-let tipText = "";
-let tipClass = "normal";
+    // Somatotip orientatiu segons IMC
+    let somatotip;
+    if (imc < 18.5)      somatotip = "Ectomorf";
+    else if (imc < 25)   somatotip = "Mesomorf";
+    else                 somatotip = "Endomorf";
 
-if (cat === "baix") {
-  tipText = "Consell: IMC baix, et recomanem que guanyis pes de forma saludable.";
-  tipClass = "baix";
-} else if (cat === "alt") {
-  tipText = "Consell: IMC alt, intenta mantenir hàbits saludables i controlar el pes.";
-  tipClass = "alt";
-} else {
-  tipText = "El teu IMC és dins del rang normal. Mantén hàbits actius i alimentació equilibrada.";
-  tipClass = "normal";
-}
+    // Tip segons categoria (coloreado por CSS)
+    const tipEl = document.getElementById("tip");
+    let tipText = "";
+    let tipClass = "normal";
+    if (cat === "baix") { tipText = "Consell: IMC baix, et recomanem que guanyis pes de forma saludable."; tipClass = "baix"; }
+    else if (cat === "alt") { tipText = "Consell: IMC alt, intenta mantenir hàbits saludables i controlar el pes."; tipClass = "alt"; }
+    else { tipText = "El teu IMC és dins del rang normal. Mantén hàbits actius i alimentació equilibrada."; tipClass = "normal"; }
+    tipEl.textContent = tipText;
+    tipEl.className = "tip " + tipClass;
 
-tipEl.textContent = tipText;
-tipEl.className = "tip " + tipClass;
+    // Resultats
+    document.getElementById("resultat").textContent = `Resultat: IMC ${imc.toFixed(1)} → ${cat}`;
+    document.getElementById("explicacio-imc").innerHTML =
+      `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br><br>` +
+      "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
+      "Serveix per estimar si el pes és baix, normal o alt en adults.";
 
-   // Mostrar resultat
-  document.getElementById("resultat").textContent =
-    `Resultat: IMC ${imc.toFixed(1)} → ${cat}`;
+    // Menors: nota + taula segons gènere
+    const nota = document.getElementById("nota");
+    const tablaHome = document.querySelector(".tabla-home");
+    const tablaDona = document.querySelector(".tabla-dona");
+    const genere = (this.genere && this.genere.value) || "Home";
 
-  document.getElementById("explicacio-imc").innerHTML =
-    `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br><br>` +
-    "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
-    "Serveix per estimar si el pes és baix, normal o alt en adults.";
+    function highlightAgeRow(table, age) {
+      if (!table) return;
+      table.querySelectorAll("tbody tr").forEach(tr => tr.classList.remove("hl"));
+      const rows = Array.from(table.querySelectorAll("tbody tr"));
+      const target = rows.find(tr => (tr.cells[0]?.textContent || "").trim().startsWith(`${age} anys`));
+      if (target) target.classList.add("hl");
+    }
 
-  // Nota i taula per a menors
-  const nota = document.getElementById("nota");
-const tablaHome = document.querySelector(".tabla-home");
-const tablaDona = document.querySelector(".tabla-dona");
+    if (!isNaN(edat) && edat < 18) {
+      nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
+      if (genere === "Dona") {
+        if (tablaDona) { tablaDona.style.display = "table"; highlightAgeRow(tablaDona, edat); }
+        if (tablaHome)  tablaHome.style.display  = "none";
+      } else {
+        if (tablaHome)  { tablaHome.style.display = "table"; highlightAgeRow(tablaHome, edat); }
+        if (tablaDona)  tablaDona.style.display  = "none";
+      }
+    } else {
+      nota.textContent = "";
+      if (tablaHome)  tablaHome.style.display  = "none";
+      if (tablaDona)  tablaDona.style.display  = "none";
+    }
 
-// helper para resaltar fila de la edad
-function highlightAgeRow(table, age) {
-  if (!table) return;
-  // Quitar resaltados previos
-  table.querySelectorAll("tbody tr").forEach(tr => tr.classList.remove("hl"));
-  // Buscar fila que empieza por "NN anys"
-  const rows = Array.from(table.querySelectorAll("tbody tr"));
-  const target = rows.find(tr => (tr.cells[0]?.textContent || "").trim().startsWith(`${age} anys`));
-  if (target) target.classList.add("hl");
-}
-
-if (!isNaN(edat) && edat < 18) {
-  // Mostrar nota y la tabla por género
-  nota.textContent = "Atenció: en menors de 18 anys, l'IMC s'interpreta amb taules específiques per edat i gènere. Consulta la taula orientativa:";
-
-  // Mostrar/ocultar según género seleccionado
-  const genereSelect = document.querySelector('select[name="genere"]');
-  const genere = genereSelect ? genereSelect.value : "";
-
-  if (genere === "Dona") {
-    if (tablaDona) tablaDona.style.display = "table";
-    if (tablaHome) tablaHome.style.display = "none";
-    highlightAgeRow(tablaDona, edat);
-  } else {
-    // Por defecto mostramos "Home" si no han elegido o han puesto "Home"
-    if (tablaHome) tablaHome.style.display = "table";
-    if (tablaDona) tablaDona.style.display = "none";
-    highlightAgeRow(tablaHome, edat);
+    document.getElementById("panel-resultat").style.display = "block";
+  } catch (err) {
+    console.error(err);
+    alert("Hi ha hagut un error al calcular. Revisa que el codi estigui complet i ben tancat.");
   }
-} else {
-  // Adult o sin edad: ocultar ambas tablas
-  nota.textContent = "";
-  if (tablaHome) tablaHome.style.display = "none";
-  if (tablaDona) tablaDona.style.display = "none";
-}
+});
+
 
 
 // Cerrar otros acordeones cuando se abre uno
@@ -153,6 +144,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
