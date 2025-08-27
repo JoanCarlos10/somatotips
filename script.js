@@ -44,10 +44,10 @@ tipEl.className = "tip " + tipClass;
     `Resultat: IMC ${imc.toFixed(1)} → ${cat}`;
 
   document.getElementById("explicacio-imc").innerHTML =
-    `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br>` +
-    `${tip}<br><br>` +
-    "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
-    "Serveix per estimar si el pes és baix, normal o alt en adults.";
+  `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br><br>` +
+  "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
+  "Serveix per estimar si el pes és baix, normal o alt en adults.";
+
 
   // Nota segons l'edat
   const nota = document.getElementById("nota");
@@ -125,6 +125,7 @@ document.querySelectorAll('#faq details').forEach((det) => {
   // Inicio
   update();
 })();
+
 
 
 
