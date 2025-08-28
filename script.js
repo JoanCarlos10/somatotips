@@ -400,17 +400,22 @@ function getSomatoFromIMC(imc) {
     doc.text("Menú orientatiu (7 dies)", x, y+=22);
     doc.setFont("helvetica","normal"); doc.setFontSize(11);
 
-  menu.forEach(dia => {
-    if (y > 760) { doc.addPage(); x = margin; y = margin; }
-    doc.setFont("helvetica","bold");
-    doc.text(dia.dia, x, y+=16);
-    doc.setFont("helvetica","normal");
-    y = wrap(doc, `Esmorzar: ${dia.esmorzar}`, x, y, maxW);
-    y = wrap(doc, `Dinar: ${dia.dinar}`, x, y, maxW);
-    y = wrap(doc, `Sopar: ${dia.sopar}`, x, y, maxW);
-    y = wrap(doc, `Snack: ${dia.snack}`, x, y, maxW);
-    y += 6;
-  });
+menu.forEach(dia => {
+  if (y > 760) { doc.addPage(); x = margin; y = margin; }
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(12);
+  doc.text(dia.dia, x, y += 18);   // título del día
+  doc.setFont("helvetica","normal");
+  y += 4;                          // <-- margen bajo el título
+
+  y = wrap(doc, `Esmorzar: ${dia.esmorzar}`, x, y, maxW);
+  y = wrap(doc, `Dinar: ${dia.dinar}`,     x, y, maxW);
+  y = wrap(doc, `Sopar: ${dia.sopar}`,     x, y, maxW);
+  y = wrap(doc, `Snack: ${dia.snack}`,     x, y, maxW);
+
+  y += 8;                          // espacio entre días
+});
 
 
     // Salto
@@ -593,6 +598,7 @@ function getSomatoFromIMC(imc) {
     doc.save(fname);
   });
 })();
+
 
 
 
