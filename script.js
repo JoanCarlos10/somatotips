@@ -437,27 +437,160 @@ function lineWrap(doc, text, width) {
   });
 })();
 
-// Test mínimo para el botón PDF
-const pdfBtn = document.getElementById("dietes-pdf");
-if (pdfBtn) {
-  pdfBtn.addEventListener("click", () => {
-    console.log("click en dietes-pdf");
-    if (!window.jspdf) {
-      alert("jsPDF no està carregat. Revisa el <script> del CDN al final de l'HTML.");
-      return;
+// ================== GENERADOR PDF COMPLET ==================
+(function attachFullPDF(){
+  const btn = document.getElementById("dietes-pdf");
+  if (!btn) return;
+
+  // Helpers
+  function somatoFromIMC(imc){ return imc < 18.5 ? "Ectomorf" : imc < 25 ? "Mesomorf" : "Endomorf"; }
+  function wrap(doc, txt, maxW){ doc.splitTextToSize(txt, maxW).forEach(l => { doc.text(l, doc.x, doc.y+=6); }); }
+
+  function buildMenu(objectiu){
+    const dies = ["Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte","Diumenge"];
+    const vari = {
+      perdre: [
+        ["Iogurt natural + maduixes","Amanida completa + pollastre","Truita d’espinacs + verdures","Poma / nous"],
+        ["Llet o vegetal + torrades integrals","Cigrons amb verdures + tonyina","Peix blanc + verdures al vapor","Iogurt natural"],
+        ["Iogurt + civada + plàtan (ració petita)","Pasta integral + gall dindi + amanida","Llenties estofades + amanida","Pastanaga + hummus"],
+        ["Batut de llet + fruita","Brou + arròs + ou dur + amanida","Truita francesa + pa integral (petit)","Fruita de temporada"],
+        ["Iogurt + granola (poca)","Quinoa + pollastre + amanida","Peix blau + amanida (greix moderat)","Iogurt + nous (poques)"],
+        ["Torrades integrals + ou","Arròs + llenties + amanida","Hamburguesa magra + verdures","Fruita / fruits secs (poques)"],
+        ["Iogurt + fruita","Pasta integral + tonyina + amanida","Pollastre al forn + verdures","Iogurt / formatge tendre"],
+      ],
+      mantenir: [
+        ["Iogurt + civada + fruita","Arròs integral + pollastre + amanida","Truita d’espinacs + amanida","Poma / nous"],
+        ["Llet o vegetal + torrades","Cigrons amb verdures + tonyina","Salmó + verdures + arròs","Iogurt natural"],
+        ["Iogurt + civada + plàtan","Pasta integral + gall dindi + amanida","Llenties + amanida","Pastanaga + hummus"],
+        ["Batut llet + fruita","Brou + arròs + ou dur + amanida","Truita francesa + pa integral","Fruita de temporada"],
+        ["Iogurt + granola","Quinoa + pollastre + amanida","Peix blanc + patata + amanida","Iogurt + nous"],
+        ["Torrades integrals + ou","Arròs + llenties + amanida","Hamburguesa magra + verdures","Fruita / fruits secs"],
+        ["Iogurt + fruita","Pasta integral + tonyina + amanida","Pollastre al forn + verdures","Iogurt / formatge tendre"],
+      ],
+      guanyar: [
+        ["Truita + pa integral + fruita","Pasta integral + carn magra + verdures","Arròs + tonyina/ous + amanida","Iogurt grec + fruita"],
+        ["Llet + torrades + mantega de cacauet","Arròs integral + pollastre + amanida","Salmó + arròs + verdures","Iogurt grec"],
+        ["Iogurt + civada + plàtan","Pasta + gall dindi + oli d’oliva","Llenties + arròs + amanida","Formatge + torrades"],
+        ["Batut de llet + fruita","Quinoa + pollastre + amanida","Truita + pa + amanida","Iogurt + fruits secs"],
+        ["Iogurt + granola","Arròs + peix blau + amanida","Patata + carn magra + verdures","Pa + hummus"],
+        ["Torrades + ous remenats","Arròs + llenties + amanida","Hamburguesa magra + arròs + verdures","Iogurt grec + fruita"],
+        ["Iogurt + fruita + civada","Pasta + tonyina + amanida","Pollastre al forn + arròs + verdures","Iogurt grec / fruits secs"],
+      ]
+    };
+    return dies.map((dia,i)=>({
+      dia,
+      esmorzar: vari[objectiu][i][0],
+      dinar:    vari[objectiu][i][1],
+      sopar:    vari[objectiu][i][2],
+      snack:    vari[objectiu][i][3],
+    }));
+  }
+
+  function buildEx(objectiu){
+    if(objectiu==="perdre") return [
+      "3–4 dies/setm de cardio moderat (30–40’): caminar ràpid/cinta/bici.",
+      "2 dies/setm de força total cos (bàsics: squat, push, pull).",
+      "Passos diaris: 8–10k. 1–2 sessions HIIT curtes opcional."
+    ];
+    if(objectiu==="guanyar") return [
+      "4–5 dies/setm de força (push/pull/legs o torso-cames).",
+      "Progressió de càrregues; 6–12 repeticions; 60–90'' descans.",
+      "Cardio lleu 2 dies (20–25’) per salut/metabòlic."
+    ];
+    return [
+      "3 dies força + 2 dies cardio moderat.",
+      "Mobilitat/estiraments 10’ post-sessió.",
+      "Passos diaris: 8–10k."
+    ];
+  }
+
+  btn.addEventListener("click", () => {
+    if (!window.jspdf) { alert("jsPDF no està carregat."); return; }
+    const { jsPDF } = window.jspdf;
+
+    // Leer datos ya calculados en la secció Dietes
+    const f = document.getElementById("dietes-form");
+    if (!f) return alert("Omple la calculadora de dietes primer.");
+    const pes = parseFloat(f.pes.value);
+    const activitat = f.activitat.value;       // baix | mig | alt
+    const objectiu = f.objectiu.value;         // perdre | mantenir | guanyar
+
+    const kcalText = document.getElementById("dietes-kcal")?.textContent || "";
+    const macrosLi = Array.from(document.getElementById("dietes-macros")?.querySelectorAll("li") || []).map(li => li.textContent);
+
+    // Intentar recuperar IMC i somatotip del formulari anterior (si el van calcular)
+    let imc = null, somato = null;
+    const r = document.getElementById("resultat")?.textContent || ""; // "Resultat: IMC 21.2 → normal"
+    const m = r.match(/IMC\s+([\d.]+)/);
+    if (m){ imc = parseFloat(m[1]); somato = somatoFromIMC(imc); }
+    const explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
+
+    // Construir contingut
+    const menu = buildMenu(objectiu);
+    const exercici = buildEx(objectiu);
+
+    // Crear PDF
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const margin = 40; let x = margin, y = margin; const maxW = 515;
+
+    // Capçalera
+    doc.setFont("helvetica","bold"); doc.setFontSize(16);
+    doc.text("Pla personalitzat – Dietes i exercici (orientatiu)", x, y); y += 20;
+
+    doc.setFont("helvetica","normal"); doc.setFontSize(11);
+    doc.text(`Pes: ${isNaN(pes) ? "—" : pes+" kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); y += 16;
+    if (imc !== null){
+      doc.text(`IMC: ${imc.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); y += 16;
     }
-    // Crear un PDF muy simple
-    const { jsPDF } = window.jspdf;        // <- acceso UMD
-    try {
-      const doc = new jsPDF();
-      doc.text("Prova de PDF (hola!)", 20, 20);
-      doc.save("prova.pdf");
-    } catch (err) {
-      console.error(err);
-      alert("Error creant el PDF. Mira la consola (F12).");
+
+    // Kcal i macros
+    if (kcalText){ wrap(doc, kcalText, maxW); y += 6; }
+    if (macrosLi.length){
+      doc.setFont("helvetica","bold"); doc.text("Macros estimats:", x, y+=14);
+      doc.setFont("helvetica","normal");
+      macrosLi.forEach(li=>{ y+=14; wrap(doc, "• "+li, maxW); });
     }
+
+    // Menú 7 dies
+    if (y > 700){ doc.addPage(); x = margin; y = margin; }
+    doc.setFont("helvetica","bold"); doc.setFontSize(13);
+    doc.text("Menú orientatiu (7 dies)", x, y+=22);
+    doc.setFont("helvetica","normal"); doc.setFontSize(11);
+
+    menu.forEach(d=>{
+      if (y > 760){ doc.addPage(); x=margin; y=margin; }
+      doc.setFont("helvetica","bold"); doc.text(d.dia, x, y+=16);
+      doc.setFont("helvetica","normal");
+      wrap(doc, `Esmorzar: ${d.esmorzar}`, maxW);
+      wrap(doc, `Dinar: ${d.dinar}`, maxW);
+      wrap(doc, `Sopar: ${d.sopar}`, maxW);
+      wrap(doc, `Snack: ${d.snack}`, maxW);
+      y += 6;
+    });
+
+    // Exercici
+    if (y > 720){ doc.addPage(); x=margin; y=margin; }
+    doc.setFont("helvetica","bold"); doc.setFontSize(13);
+    doc.text("Proposta d’exercici setmanal", x, y+=22);
+    doc.setFont("helvetica","normal"); doc.setFontSize(11);
+    exercici.forEach(p=>{ y+=14; wrap(doc, "• "+p, maxW); });
+
+    // Bloc IMC i disclaimer
+    y += 18;
+    if (explicacioIMC){
+      doc.setFont("helvetica","bold"); doc.text("Què és l’IMC?", x, y);
+      doc.setFont("helvetica","normal"); y += 14; wrap(doc, explicacioIMC, maxW);
+    }
+    y += 8;
+    doc.setFont("helvetica","italic");
+    wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", maxW);
+
+    // Guardar
+    const fname = `pla_dietes_${objectiu}_${Date.now()}.pdf`;
+    doc.save(fname);
   });
-}
+})();
+
 
 
 
