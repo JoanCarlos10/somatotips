@@ -437,6 +437,28 @@ function lineWrap(doc, text, width) {
   });
 })();
 
+// Test mínimo para el botón PDF
+const pdfBtn = document.getElementById("dietes-pdf");
+if (pdfBtn) {
+  pdfBtn.addEventListener("click", () => {
+    console.log("click en dietes-pdf");
+    if (!window.jspdf) {
+      alert("jsPDF no està carregat. Revisa el <script> del CDN al final de l'HTML.");
+      return;
+    }
+    // Crear un PDF muy simple
+    const { jsPDF } = window.jspdf;        // <- acceso UMD
+    try {
+      const doc = new jsPDF();
+      doc.text("Prova de PDF (hola!)", 20, 20);
+      doc.save("prova.pdf");
+    } catch (err) {
+      console.error(err);
+      alert("Error creant el PDF. Mira la consola (F12).");
+    }
+  });
+}
+
 
 
 
