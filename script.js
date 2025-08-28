@@ -333,50 +333,57 @@ function getSomatoFromIMC(imc) {
   const btn = document.getElementById("dietes-pdf");
   if (!btn) return;
 
-  btn.addEventListener("click", () => {
-    // Leer datos del formulario de dietas
-    const f = document.getElementById("dietes-form");
-    if (!f) return alert("Omple la calculadora de dietes primer.");
-    const pes = parseFloat(f.pes.value);
-    const activitat = f.activitat.value;         // baix|mig|alt
-    const objectiu = f.objectiu.value;           // perdre|mantenir|guanyar
-    const kcalText = document.getElementById("dietes-kcal")?.textContent || "";
-    const macrosUl = document.getElementById("dietes-macros");
-    const macros = macrosUl ? Array.from(macrosUl.querySelectorAll("li")).map(li => li.textContent) : [];
+btn.addEventListener("click", () => {
+  // 1) coge el form y valida
+// 1) coge el form y valida
+const f = document.getElementById("dietes-form");
+if (!f) return alert("Omple la calculadora de dietes primer.");
 
-    // Intentar coger IMC/somatotip si ya lo calculó
-    let imcTxt = document.getElementById("resultat")?.textContent || ""; // "Resultat: IMC 21.2 → normal"
-    let explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
+// 2) lee valores del form
+const pes = parseFloat(f.pes.value);
+const activitat = f.activitat.value;    // baix | mig | alt
+const objectiu = f.objectiu.value;      // perdre | mantenir | guanyar
 
-    // Parseo sencillo de IMC
-    let imcVal = null, somato = null;
-    const m = imcTxt.match(/IMC\s+([\d.]+)/);
-    if (m) {
-      imcVal = parseFloat(m[1]);
-      somato = getSomatoFromIMC(imcVal);
-    }
+// 3) textos específicos por objectiu
+const conf = planIntro(objectiu);
 
-    // Construir menú y plan de ejercicios
-    const menu = buildMenuSemana(objectiu, kcalText);
-    const exercici = buildEjercicio(objectiu);
+// 3.1) IMC/somatotip si existe (SUBIR este bloque aquí)
+let imcTxt = document.getElementById("resultat")?.textContent || "";
+let explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
+const m = imcTxt.match(/IMC\s+([\d.]+)/);
+const imcVal = m ? parseFloat(m[1]) : null;
+const somato = imcVal != null ? somatoFromIMC(imcVal) : null;
 
-    // ---------- Crear PDF con jsPDF ----------
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: "pt", format: "a4" });
-    const margin = 40;
-    let x = margin, y = margin;
-    const maxW = 515; // ancho útil A4 en pt (595-2*40 aprox)
+// 4) (opcional) leer kcal/macros del DOM
+const kcalText = document.getElementById("dietes-kcal")?.textContent || "";
+const macrosUl = document.getElementById("dietes-macros");
+const macros = macrosUl ? Array.from(macrosUl.querySelectorAll("li")).map(li => li.textContent) : [];
 
-    doc.setFont("helvetica","bold"); doc.setFontSize(16);
-    doc.text("Pla personalitzat – Dietes i exercici (orientatiu)", x, y); y += 18;
+// --- Cabecera específica según objectiu ---
+doc.setFont("helvetica","bold"); doc.setFontSize(16);
+doc.text(conf.title, x, y); y += 20;
 
-    doc.setFont("helvetica","normal"); doc.setFontSize(11);
-    doc.text(`Pes: ${isNaN(pes) ? "—" : pes + " kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); y += 16;
+doc.setFont("helvetica","normal"); doc.setFontSize(11);
+doc.text(`Pes: ${isNaN(pes) ? "—" : pes + " kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); 
+y += 16;
 
-    if (imcVal !== null) {
-      doc.text(`IMC: ${imcVal.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y);
-      y += 16;
-    }
+if (imcVal != null) { 
+  doc.text(`IMC: ${imcVal.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); 
+  y += 16; 
+}
+
+// Intro
+y = wrap(doc, conf.intro, x, y, maxW);  
+y += 8;
+
+// Tips
+doc.setFont("helvetica","bold");
+doc.text("Pautes clau:", x, y); 
+doc.setFont("helvetica","normal");
+conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y + 12, maxW); });
+y += 6;
+
+// …y sigues con kcal/macros, menú, exercici, etc.
 
      // Kcal
   if (kcalText) {
@@ -512,6 +519,48 @@ menu.forEach(dia => {
     ];
   }
 
+  // ======= Helpers específics per objectiu =======
+
+// Intro i tips per objectiu
+function planIntro(objectiu){
+  const data = {
+    perdre: {
+      title: "Pla personalitzat per BAIXAR pes",
+      intro: "Aquest pla està enfocat a un dèficit calòric moderat i sostenible, prioritzant aliments frescos, proteïna suficient i hàbits actius.",
+      tips: [
+        "Prioritza verdures, proteïna magra i hidrats integrals.",
+        "Evita begudes ensucrades i grànuls 'extra' fora d’àpats.",
+        "Dorm 7–9 h i camina 8–10k passos/dia."
+      ]
+    },
+    mantenir: {
+      title: "Pla personalitzat de MANTENIMENT",
+      intro: "Objectiu de pes estable amb energia adequada per rendir bé. Prioritza varietat, aliments reals i regularitat d’horaris.",
+      tips: [
+        "Mantén 3 àpats principals + 1 snack segons gana.",
+        "Hidratació: 1.5–2 L/dia. Evita grans oscil·lacions calòriques.",
+        "Combina força (3 dies) i cardio moderat (2 dies)."
+      ]
+    },
+    guanyar: {
+      title: "Pla personalitzat per GUANYAR pes",
+      intro: "Lleuger superàvit calòric, proteïna i hidrats suficients per afavorir el guany muscular amb entrenament de força progressiu.",
+      tips: [
+        "Afegeix 1–2 racions d’hidrats extra al dia.",
+        "Reparteix proteïna en 3–4 preses/dia.",
+        "Entrena força 4–5 dies/setmana i progressa càrregues."
+      ]
+    }
+  };
+  return data[objectiu] || data.mantenir;
+}
+
+// Menú 7 dies (ja adaptat per objectiu)
+function buildMenu(objectiu){ /* <- DEJA AQUÍ tu versión actual, ya está bien */ }
+
+// Exercici per objectiu (ja el tens; si vols canviar textos, hazlo allí)
+function buildEx(objectiu){ /* <- DEJA AQUÍ tu versión actual, ya está bien */ }
+
   btn.addEventListener("click", () => {
     if (!window.jspdf) { alert("jsPDF no està carregat."); return; }
     const { jsPDF } = window.jspdf;
@@ -610,6 +659,7 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
 
 
 
