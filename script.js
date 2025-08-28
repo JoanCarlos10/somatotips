@@ -407,7 +407,7 @@ menu.forEach(dia => {
   doc.setFontSize(12);
   doc.text(dia.dia, x, y += 18);   // título del día
   doc.setFont("helvetica","normal");
-  y += 4;                          // <-- margen bajo el título
+  y += 10;                          // <-- margen bajo el título
 
   y = wrap(doc, `Esmorzar: ${dia.esmorzar}`, x, y, maxW);
   y = wrap(doc, `Dinar: ${dia.dinar}`,     x, y, maxW);
@@ -598,6 +598,7 @@ menu.forEach(dia => {
     doc.save(fname);
   });
 })();
+
 
 
 
