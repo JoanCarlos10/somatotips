@@ -457,52 +457,87 @@ doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
 });          // <-- cierra addEventListener
 })();        // <-- cierra IIFE attachFullPDF
 
-// ================== GENERADOR PDF COMPLET ==================
-(function attachFullPDF(){
+// ====== Generador de PDF único y estable ======
+(function attachPDFGenerator(){
   const btn = document.getElementById("dietes-pdf");
   if (!btn) return;
 
   // Helpers
   function somatoFromIMC(imc){ return imc < 18.5 ? "Ectomorf" : imc < 25 ? "Mesomorf" : "Endomorf"; }
-  function wrap(doc, txt, maxW){ doc.splitTextToSize(txt, maxW).forEach(l => { doc.text(l, doc.x, doc.y+=6); }); }
+  function wrap(doc, text, x, y, maxW, lineH = 14) {
+    const lines = doc.splitTextToSize(String(text ?? ""), maxW);
+    lines.forEach(l => { doc.text(l, x, y); y += lineH; });
+    return y;
+  }
 
+  function planIntro(objectiu){
+    const data = {
+      perdre: {
+        title: "Pla personalitzat per BAIXAR pes",
+        intro: "Aquest pla està enfocat a un dèficit calòric moderat i sostenible, prioritzant aliments frescos, proteïna suficient i hàbits actius.",
+        tips: [
+          "Prioritza verdures, proteïna magra i hidrats integrals.",
+          "Evita begudes ensucrades i grànuls extra fora d’àpats.",
+          "Dorm 7–9 h i camina 8–10k passos/dia."
+        ]
+      },
+      mantenir: {
+        title: "Pla personalitzat de MANTENIMENT",
+        intro: "Objectiu de pes estable amb energia adequada per rendir bé. Prioritza varietat, aliments reals i regularitat d’horaris.",
+        tips: [
+          "Mantén 3 àpats principals + 1 snack segons gana.",
+          "Hidratació: 1.5–2 L/dia. Evita grans oscil·lacions calòriques.",
+          "Combina força (3 dies) i cardio moderat (2 dies)."
+        ]
+      },
+      guanyar: {
+        title: "Pla personalitzat per GUANYAR pes",
+        intro: "Lleuger superàvit calòric, proteïna i hidrats suficients per afavorir el guany muscular amb entrenament de força progressiu.",
+        tips: [
+          "Afegeix 1–2 racions d’hidrats extra al dia.",
+          "Reparteix proteïna en 3–4 preses/dia.",
+          "Entrena força 4–5 dies/setmana i progressa càrregues."
+        ]
+      }
+    };
+    return data[objectiu] || data.mantenir;
+  }
+
+  // Menú 7 dies (usa tu versión ya probada; aquí dejo una stub simple)
   function buildMenu(objectiu){
     const dies = ["Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte","Diumenge"];
     const vari = {
       perdre: [
-        ["Iogurt natural + maduixes","Amanida completa + pollastre","Truita d’espinacs + verdures","Poma / nous"],
-        ["Llet o vegetal + torrades integrals","Cigrons amb verdures + tonyina","Peix blanc + verdures al vapor","Iogurt natural"],
-        ["Iogurt + civada + plàtan (ració petita)","Pasta integral + gall dindi + amanida","Llenties estofades + amanida","Pastanaga + hummus"],
-        ["Batut de llet + fruita","Brou + arròs + ou dur + amanida","Truita francesa + pa integral (petit)","Fruita de temporada"],
-        ["Iogurt + granola (poca)","Quinoa + pollastre + amanida","Peix blau + amanida (greix moderat)","Iogurt + nous (poques)"],
+        ["Iogurt natural + maduixes","Amanida + pollastre","Truita d’espinacs + verdures","Poma / nous"],
+        ["Llet o vegetal + torrades","Cigrons + verdures + tonyina","Peix blanc + verdures al vapor","Iogurt natural"],
+        ["Iogurt + civada + plàtan","Pasta integral + gall dindi + amanida","Llenties estofades","Pastanaga + hummus"],
+        ["Batut llet + fruita","Brou + arròs + ou + amanida","Truita francesa + pa integral (petit)","Fruita temporada"],
+        ["Iogurt + granola (poca)","Quinoa + pollastre + amanida","Peix blau + amanida","Iogurt + nous (poques)"],
         ["Torrades integrals + ou","Arròs + llenties + amanida","Hamburguesa magra + verdures","Fruita / fruits secs (poques)"],
         ["Iogurt + fruita","Pasta integral + tonyina + amanida","Pollastre al forn + verdures","Iogurt / formatge tendre"],
       ],
       mantenir: [
         ["Iogurt + civada + fruita","Arròs integral + pollastre + amanida","Truita d’espinacs + amanida","Poma / nous"],
-        ["Llet o vegetal + torrades","Cigrons amb verdures + tonyina","Salmó + verdures + arròs","Iogurt natural"],
-        ["Iogurt + civada + plàtan","Pasta integral + gall dindi + amanida","Llenties + amanida","Pastanaga + hummus"],
-        ["Batut llet + fruita","Brou + arròs + ou dur + amanida","Truita francesa + pa integral","Fruita de temporada"],
+        ["Llet o vegetal + torrades","Cigrons + verdures + tonyina","Peix blau + amanida","Iogurt natural"],
+        ["Iogurt + civada + plàtan","Pasta + gall dindi + oli d’oliva","Llenties + amanida","Fruita / hummus"],
+        ["Batut + fruita","Brou + arròs + ou + amanida","Truita francesa + pa integral","Fruita temporada"],
         ["Iogurt + granola","Quinoa + pollastre + amanida","Peix blanc + patata + amanida","Iogurt + nous"],
-        ["Torrades integrals + ou","Arròs + llenties + amanida","Hamburguesa magra + verdures","Fruita / fruits secs"],
+        ["Torrades + ou","Arròs + llenties + amanida","Hamburguesa magra + verdures","Fruita / fruits secs"],
         ["Iogurt + fruita","Pasta integral + tonyina + amanida","Pollastre al forn + verdures","Iogurt / formatge tendre"],
       ],
       guanyar: [
         ["Truita + pa integral + fruita","Pasta integral + carn magra + verdures","Arròs + tonyina/ous + amanida","Iogurt grec + fruita"],
         ["Llet + torrades + mantega de cacauet","Arròs integral + pollastre + amanida","Salmó + arròs + verdures","Iogurt grec"],
         ["Iogurt + civada + plàtan","Pasta + gall dindi + oli d’oliva","Llenties + arròs + amanida","Formatge + torrades"],
-        ["Batut de llet + fruita","Quinoa + pollastre + amanida","Truita + pa + amanida","Iogurt + fruits secs"],
+        ["Batut + civada","Quinoa + pollastre + amanida","Truita + pa + amanida","Iogurt + fruits secs"],
         ["Iogurt + granola","Arròs + peix blau + amanida","Patata + carn magra + verdures","Pa + hummus"],
         ["Torrades + ous remenats","Arròs + llenties + amanida","Hamburguesa magra + arròs + verdures","Iogurt grec + fruita"],
         ["Iogurt + fruita + civada","Pasta + tonyina + amanida","Pollastre al forn + arròs + verdures","Iogurt grec / fruits secs"],
       ]
     };
-    return dies.map((dia,i)=>({
-      dia,
-      esmorzar: vari[objectiu][i][0],
-      dinar:    vari[objectiu][i][1],
-      sopar:    vari[objectiu][i][2],
-      snack:    vari[objectiu][i][3],
+    return dies.map((dia,i)=>({ dia,
+      esmorzar: vari[objectiu][i][0], dinar: vari[objectiu][i][1],
+      sopar: vari[objectiu][i][2], snack: vari[objectiu][i][3],
     }));
   }
 
@@ -514,7 +549,7 @@ doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
     ];
     if(objectiu==="guanyar") return [
       "4–5 dies/setm de força (push/pull/legs o torso-cames).",
-      "Progressió de càrregues; 6–12 repeticions; 60–90'' descans.",
+      "Progressió de càrregues; 6–12 repeticions; 60–90’’ descans.",
       "Cardio lleu 2 dies (20–25’) per salut/metabòlic."
     ];
     return [
@@ -524,136 +559,103 @@ doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
     ];
   }
 
-  // ======= Helpers específics per objectiu =======
-
-// Intro i tips per objectiu
-function planIntro(objectiu){
-  const data = {
-    perdre: {
-      title: "Pla personalitzat per BAIXAR pes",
-      intro: "Aquest pla està enfocat a un dèficit calòric moderat i sostenible, prioritzant aliments frescos, proteïna suficient i hàbits actius.",
-      tips: [
-        "Prioritza verdures, proteïna magra i hidrats integrals.",
-        "Evita begudes ensucrades i grànuls 'extra' fora d’àpats.",
-        "Dorm 7–9 h i camina 8–10k passos/dia."
-      ]
-    },
-    mantenir: {
-      title: "Pla personalitzat de MANTENIMENT",
-      intro: "Objectiu de pes estable amb energia adequada per rendir bé. Prioritza varietat, aliments reals i regularitat d’horaris.",
-      tips: [
-        "Mantén 3 àpats principals + 1 snack segons gana.",
-        "Hidratació: 1.5–2 L/dia. Evita grans oscil·lacions calòriques.",
-        "Combina força (3 dies) i cardio moderat (2 dies)."
-      ]
-    },
-    guanyar: {
-      title: "Pla personalitzat per GUANYAR pes",
-      intro: "Lleuger superàvit calòric, proteïna i hidrats suficients per afavorir el guany muscular amb entrenament de força progressiu.",
-      tips: [
-        "Afegeix 1–2 racions d’hidrats extra al dia.",
-        "Reparteix proteïna en 3–4 preses/dia.",
-        "Entrena força 4–5 dies/setmana i progressa càrregues."
-      ]
-    }
-  };
-  return data[objectiu] || data.mantenir;
-}
-
-// Menú 7 dies (ja adaptat per objectiu)
-function buildMenu(objectiu){ /* <- DEJA AQUÍ tu versión actual, ya está bien */ }
-
-// Exercici per objectiu (ja el tens; si vols canviar textos, hazlo allí)
-function buildEx(objectiu){ /* <- DEJA AQUÍ tu versión actual, ya está bien */ }
-
   btn.addEventListener("click", () => {
+    // jsPDF cargado
     if (!window.jspdf) { alert("jsPDF no està carregat."); return; }
     const { jsPDF } = window.jspdf;
 
-    // Leer datos ya calculados en la secció Dietes
+    // Datos del form/resultados
     const f = document.getElementById("dietes-form");
-    if (!f) return alert("Omple la calculadora de dietes primer.");
+    if (!f) { alert("Omple la calculadora de dietes primer."); return; }
     const pes = parseFloat(f.pes.value);
     const activitat = f.activitat.value;       // baix | mig | alt
     const objectiu = f.objectiu.value;         // perdre | mantenir | guanyar
+    const conf = planIntro(objectiu);
 
     const kcalText = document.getElementById("dietes-kcal")?.textContent || "";
-    const macrosLi = Array.from(document.getElementById("dietes-macros")?.querySelectorAll("li") || []).map(li => li.textContent);
+    const macrosLi = Array.from(
+      document.getElementById("dietes-macros")?.querySelectorAll("li") || []
+    ).map(li => li.textContent);
 
-    // Intentar recuperar IMC i somatotip del formulari anterior (si el van calcular)
+    // IMC de la secció anterior (si existeix)
     let imc = null, somato = null;
     const r = document.getElementById("resultat")?.textContent || ""; // "Resultat: IMC 21.2 → normal"
     const m = r.match(/IMC\s+([\d.]+)/);
     if (m){ imc = parseFloat(m[1]); somato = somatoFromIMC(imc); }
     const explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
 
-    // Construir contingut
-    const menu = buildMenu(objectiu);
-    const exercici = buildEx(objectiu);
-
     // Crear PDF
     const doc = new jsPDF({ unit: "pt", format: "a4" });
     const margin = 40; let x = margin, y = margin; const maxW = 515;
 
-    // Capçalera
+    // Cabecera
     doc.setFont("helvetica","bold"); doc.setFontSize(16);
-    doc.text("Pla personalitzat – Dietes i exercici (orientatiu)", x, y); y += 20;
-
+    doc.text(conf.title, x, y); y += 20;
     doc.setFont("helvetica","normal"); doc.setFontSize(11);
     doc.text(`Pes: ${isNaN(pes) ? "—" : pes+" kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); y += 16;
-    if (imc !== null){
-      doc.text(`IMC: ${imc.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); y += 16;
-    }
+    if (imc !== null){ doc.text(`IMC: ${imc.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); y += 16; }
 
-    // Kcal i macros
-    if (kcalText){ wrap(doc, kcalText, maxW); y += 6; }
+    // Intro + tips
+    y = wrap(doc, conf.intro, x, y, maxW);  y += 10;
+    doc.setFont("helvetica","bold"); doc.text("Pautes clau:", x, y+=14);
+    doc.setFont("helvetica","normal");
+    conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y+4, maxW); });
+    y += 10;
+
+    // Kcal
+    if (kcalText) { y = wrap(doc, kcalText, x, y, maxW); y += 6; }
+
+    // Macros
     if (macrosLi.length){
       doc.setFont("helvetica","bold"); doc.text("Macros estimats:", x, y+=14);
       doc.setFont("helvetica","normal");
-      macrosLi.forEach(li=>{ y+=14; wrap(doc, "• "+li, maxW); });
+      macrosLi.forEach(li => { y = wrap(doc, "• " + li, x, y+14, maxW); });
     }
 
     // Menú 7 dies
-    if (y > 700){ doc.addPage(); x = margin; y = margin; }
+    if (y > 700) { doc.addPage(); x = margin; y = margin; }
     doc.setFont("helvetica","bold"); doc.setFontSize(13);
     doc.text("Menú orientatiu (7 dies)", x, y+=22);
     doc.setFont("helvetica","normal"); doc.setFontSize(11);
 
-    menu.forEach(d=>{
-      if (y > 760){ doc.addPage(); x=margin; y=margin; }
-      doc.setFont("helvetica","bold"); doc.text(d.dia, x, y+=16);
+    buildMenu(objectiu).forEach(d => {
+      if (y > 760) { doc.addPage(); x = margin; y = margin; }
+      doc.setFont("helvetica","bold"); doc.setFontSize(12);
+      doc.text(d.dia, x, y+=18);
       doc.setFont("helvetica","normal");
-      wrap(doc, `Esmorzar: ${d.esmorzar}`, maxW);
-      wrap(doc, `Dinar: ${d.dinar}`, maxW);
-      wrap(doc, `Sopar: ${d.sopar}`, maxW);
-      wrap(doc, `Snack: ${d.snack}`, maxW);
-      y += 6;
+      y += 15;
+      y = wrap(doc, `Esmorzar: ${d.esmorzar}`, x, y, maxW);
+      y = wrap(doc, `Dinar: ${d.dinar}`,     x, y, maxW);
+      y = wrap(doc, `Sopar: ${d.sopar}`,     x, y, maxW);
+      y = wrap(doc, `Snack: ${d.snack}`,     x, y, maxW);
+      y += 10;
     });
 
     // Exercici
-    if (y > 720){ doc.addPage(); x=margin; y=margin; }
+    if (y > 720) { doc.addPage(); x = margin; y = margin; }
     doc.setFont("helvetica","bold"); doc.setFontSize(13);
     doc.text("Proposta d’exercici setmanal", x, y+=22);
     doc.setFont("helvetica","normal"); doc.setFontSize(11);
-    exercici.forEach(p=>{ y+=14; wrap(doc, "• "+p, maxW); });
+    buildEx(objectiu).forEach(p => { y = wrap(doc, "• " + p, x, y + 14, maxW); });
 
-    // Bloc IMC i disclaimer
+    // Nota IMC + disclaimer
     y += 18;
     if (explicacioIMC){
       doc.setFont("helvetica","bold"); doc.text("Què és l’IMC?", x, y);
-      doc.setFont("helvetica","normal"); y += 14; wrap(doc, explicacioIMC, maxW);
+      doc.setFont("helvetica","normal");
+      y = wrap(doc, explicacioIMC, x, y + 14, maxW);
+      y += 6;
     }
-    y += 8;
     doc.setFont("helvetica","italic");
-    wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", maxW);
+    y = wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", x, y, maxW);
 
     // Guardar
-    const fname = `pla_dietes_${objectiu}_${Date.now()}.pdf`;
-    doc.save(fname);
+    const mapName = { perdre: "baixar_pes", mantenir: "manteniment", guanyar: "guanyar_pes" };
+    doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
   });
 })();
 
-// Cambiar el texto del botón según el objectiu
+// Cambiar texto del botón según objectiu
 document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener('change', function(){
   const btn = document.getElementById('dietes-pdf');
   if (!btn) return;
@@ -664,30 +666,3 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
