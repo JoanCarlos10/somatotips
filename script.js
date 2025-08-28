@@ -414,7 +414,7 @@ menu.forEach(dia => {
   y = wrap(doc, `Sopar: ${dia.sopar}`,     x, y, maxW);
   y = wrap(doc, `Snack: ${dia.snack}`,     x, y, maxW);
 
-  y += 8;                          // espacio entre días
+  y += 15;                          // espacio entre días
 });
 
 
@@ -598,6 +598,7 @@ menu.forEach(dia => {
     doc.save(fname);
   });
 })();
+
 
 
 
