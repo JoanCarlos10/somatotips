@@ -599,6 +599,18 @@ menu.forEach(dia => {
   });
 })();
 
+// Cambiar el texto del botón según el objectiu
+document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener('change', function(){
+  const btn = document.getElementById('dietes-pdf');
+  if (!btn) return;
+  const map = {
+    perdre:   "Descarregar PDF: pla per BAIXAR pes",
+    mantenir: "Descarregar PDF: pla de MANTENIMENT",
+    guanyar:  "Descarregar PDF: pla per GUANYAR pes"
+  };
+  btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
+});
+
 
 
 
