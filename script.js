@@ -334,56 +334,62 @@ function getSomatoFromIMC(imc) {
   if (!btn) return;
 
 btn.addEventListener("click", () => {
-  // 1) coge el form y valida
-// 1) coge el form y valida
-const f = document.getElementById("dietes-form");
-if (!f) return alert("Omple la calculadora de dietes primer.");
+  // 1) coger form y validar
+  const f = document.getElementById("dietes-form");
+  if (!f) return alert("Omple la calculadora de dietes primer.");
 
-// 2) lee valores del form
-const pes = parseFloat(f.pes.value);
-const activitat = f.activitat.value;    // baix | mig | alt
-const objectiu = f.objectiu.value;      // perdre | mantenir | guanyar
+  // 2) leer valores
+  const pes = parseFloat(f.pes.value);
+  const activitat = f.activitat.value;   // baix | mig | alt
+  const objectiu = f.objectiu.value;     // perdre | mantenir | guanyar
 
-// 3) textos específicos por objectiu
-const conf = planIntro(objectiu);
+  // 3) textos específicos según objectiu
+  const conf = planIntro(objectiu);
 
-// 3.1) IMC/somatotip si existe (SUBIR este bloque aquí)
-let imcTxt = document.getElementById("resultat")?.textContent || "";
-let explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
-const m = imcTxt.match(/IMC\s+([\d.]+)/);
-const imcVal = m ? parseFloat(m[1]) : null;
-const somato = imcVal != null ? somatoFromIMC(imcVal) : null;
+  // 4) kcal/macros del DOM
+  const kcalText = document.getElementById("dietes-kcal")?.textContent || "";
+  const macrosUl = document.getElementById("dietes-macros");
+  const macros = macrosUl ? Array.from(macrosUl.querySelectorAll("li")).map(li => li.textContent) : [];
 
-// 4) (opcional) leer kcal/macros del DOM
-const kcalText = document.getElementById("dietes-kcal")?.textContent || "";
-const macrosUl = document.getElementById("dietes-macros");
-const macros = macrosUl ? Array.from(macrosUl.querySelectorAll("li")).map(li => li.textContent) : [];
+  // 5) IMC / somatotip si existe
+  let imcTxt = document.getElementById("resultat")?.textContent || "";
+  let explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
+  const m = imcTxt.match(/IMC\s+([\d.]+)/);
+  const imcVal = m ? parseFloat(m[1]) : null;
+  const somato = imcVal != null ? somatoFromIMC(imcVal) : null;
 
-// --- Cabecera específica según objectiu ---
-doc.setFont("helvetica","bold"); doc.setFontSize(16);
-doc.text(conf.title, x, y); y += 20;
+  // 6) construir menú y exercici
+  const menu = buildMenu(objectiu);
+  const exercici = buildEx(objectiu);
 
-doc.setFont("helvetica","normal"); doc.setFontSize(11);
-doc.text(`Pes: ${isNaN(pes) ? "—" : pes + " kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); 
-y += 16;
+  // 7) Crear PDF con jsPDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const margin = 40;
+  let x = margin, y = margin;
+  const maxW = 515;
 
-if (imcVal != null) { 
-  doc.text(`IMC: ${imcVal.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); 
-  y += 16; 
-}
+  // --- Cabecera ---
+  doc.setFont("helvetica","bold"); doc.setFontSize(16);
+  doc.text(conf.title, x, y); y += 20;
 
-// Intro
-y = wrap(doc, conf.intro, x, y, maxW);  
-y += 8;
+  doc.setFont("helvetica","normal"); doc.setFontSize(11);
+  doc.text(`Pes: ${isNaN(pes) ? "—" : pes+" kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); y += 16;
+  if (imcVal != null) {
+    doc.text(`IMC: ${imcVal.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y);
+    y += 16;
+  }
 
-// Tips
-doc.setFont("helvetica","bold");
-doc.text("Pautes clau:", x, y); 
-doc.setFont("helvetica","normal");
-conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y + 12, maxW); });
-y += 6;
+  y = wrap(doc, conf.intro, x, y, maxW);  
+  y += 10;
 
-// …y sigues con kcal/macros, menú, exercici, etc.
+  doc.setFont("helvetica","bold");
+  doc.text("Pautes clau:", x, y+=14);
+  doc.setFont("helvetica","normal");
+  conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y+4, maxW); });
+  y += 10;
+
+  // 8) (sigues con kcal/macros, menús, exercici, IMC, disclaimer...)
 
      // Kcal
   if (kcalText) {
@@ -445,12 +451,11 @@ menu.forEach(dia => {
   doc.setFont("helvetica","italic");
   y = wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", x, y, maxW);
 
-
-    // Guardar
-    const fname = `pla_dietes_${objectiu}_${Date.now()}.pdf`;
-    doc.save(fname);
-  });
-})();
+  // 9) Guardar PDF
+  const mapName = { perdre: "baixar_pes", mantenir: "manteniment", guanyar: "guanyar_pes" };
+doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
+});          // <-- cierra addEventListener
+})();        // <-- cierra IIFE attachFullPDF
 
 // ================== GENERADOR PDF COMPLET ==================
 (function attachFullPDF(){
@@ -659,6 +664,7 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
 
 
 
