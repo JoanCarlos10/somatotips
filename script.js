@@ -323,10 +323,11 @@ function getSomatoFromIMC(imc) {
   return "Endomorf";
 }
 
-function lineWrap(doc, text, width) {
-  const lines = doc.splitTextToSize(text, width);
-  lines.forEach((l) => doc.text(l, doc.x, doc.y += 6));
-}
+  function wrap(doc, text, x, y, maxW, lineH = 14) {
+    const lines = doc.splitTextToSize(String(text ?? ""), maxW);
+    lines.forEach(l => { doc.text(l, x, y); y += lineH; });
+    return y;
+  }
 
 (function attachPDFGenerator(){
   const btn = document.getElementById("dietes-pdf");
@@ -377,19 +378,19 @@ function lineWrap(doc, text, width) {
       y += 16;
     }
 
-    // Kcal
-    if (kcalText) {
-      lineWrap(doc, kcalText, maxW);
-      y += 6;
-    }
+     // Kcal
+  if (kcalText) {
+    y = wrap(doc, kcalText, x, y, maxW);
+    y += 6;
+  }
 
-    // Macros
-    if (macros.length) {
-      doc.setFont("helvetica","bold");
-      doc.text("Macros estimats:", x, y+=12);
-      doc.setFont("helvetica","normal");
-      macros.forEach(li => { y+=14; lineWrap(doc, "• " + li, maxW); });
-    }
+  // Macros
+  if (macros.length) {
+    doc.setFont("helvetica","bold");
+    doc.text("Macros estimats:", x, y+=12);
+    doc.setFont("helvetica","normal");
+    macros.forEach(li => { y = wrap(doc, "• " + li, x, y + 14, maxW); });
+  }
 
     // Salto si hace falta
     if (y > 700) { doc.addPage(); x = margin; y = margin; }
@@ -399,37 +400,39 @@ function lineWrap(doc, text, width) {
     doc.text("Menú orientatiu (7 dies)", x, y+=22);
     doc.setFont("helvetica","normal"); doc.setFontSize(11);
 
-    menu.forEach(dia => {
-      if (y > 760) { doc.addPage(); x = margin; y = margin; }
-      doc.setFont("helvetica","bold");
-      doc.text(dia.dia, x, y+=16);
-      doc.setFont("helvetica","normal");
-      lineWrap(doc, `Esmorzar: ${dia.esmorzar}`, maxW);
-      lineWrap(doc, `Dinar: ${dia.dinar}`, maxW);
-      lineWrap(doc, `Sopar: ${dia.sopar}`, maxW);
-      lineWrap(doc, `Snack: ${dia.snack}`, maxW);
-      y += 6;
-    });
+  menu.forEach(dia => {
+    if (y > 760) { doc.addPage(); x = margin; y = margin; }
+    doc.setFont("helvetica","bold");
+    doc.text(dia.dia, x, y+=16);
+    doc.setFont("helvetica","normal");
+    y = wrap(doc, `Esmorzar: ${dia.esmorzar}`, x, y, maxW);
+    y = wrap(doc, `Dinar: ${dia.dinar}`, x, y, maxW);
+    y = wrap(doc, `Sopar: ${dia.sopar}`, x, y, maxW);
+    y = wrap(doc, `Snack: ${dia.snack}`, x, y, maxW);
+    y += 6;
+  });
+
 
     // Salto
     if (y > 720) { doc.addPage(); x = margin; y = margin; }
 
-    // Exercici
-    doc.setFont("helvetica","bold"); doc.setFontSize(13);
-    doc.text("Proposta d’exercici setmanal", x, y+=22);
-    doc.setFont("helvetica","normal"); doc.setFontSize(11);
-    exercici.forEach(p => { y+=14; lineWrap(doc, "• " + p, maxW); });
+      // Exercici
+  doc.setFont("helvetica","bold"); doc.setFontSize(13);
+  doc.text("Proposta d’exercici setmanal", x, y+=22);
+  doc.setFont("helvetica","normal"); doc.setFontSize(11);
+  exercici.forEach(p => { y = wrap(doc, "• " + p, x, y + 14, maxW); });
 
-    // Nota IMC y disclaimer
-    y += 18;
-    if (explicacioIMC) {
-      doc.setFont("helvetica","bold");
-      doc.text("Què és l’IMC?", x, y); doc.setFont("helvetica","normal");
-      y += 14; lineWrap(doc, explicacioIMC, maxW);
-      y += 6;
-    }
-    doc.setFont("helvetica","italic");
-    lineWrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", maxW);
+      // Nota IMC y disclaimer
+  y += 18;
+  if (explicacioIMC) {
+    doc.setFont("helvetica","bold");
+    doc.text("Què és l’IMC?", x, y); doc.setFont("helvetica","normal");
+    y = wrap(doc, explicacioIMC, x, y + 14, maxW);
+    y += 6;
+  }
+  doc.setFont("helvetica","italic");
+  y = wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", x, y, maxW);
+
 
     // Guardar
     const fname = `pla_dietes_${objectiu}_${Date.now()}.pdf`;
@@ -590,6 +593,7 @@ function lineWrap(doc, text, width) {
     doc.save(fname);
   });
 })();
+
 
 
 
