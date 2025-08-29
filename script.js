@@ -383,11 +383,19 @@ btn.addEventListener("click", () => {
   y = wrap(doc, conf.intro, x, y, maxW);  
   y += 10;
 
-  doc.setFont("helvetica","bold");
-  doc.text("Pautes clau:", x, y+=14);
-  doc.setFont("helvetica","normal");
-  conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y+20, maxW); });
-  y += 20;
+// Tips
+doc.setFont("helvetica","bold");
+doc.text("Pautes clau:", x, y);   // escribe en Y actual
+y += 12;                          // espacio debajo del título
+
+doc.setFont("helvetica","normal");
+for (const t of conf.tips) {
+  y = wrap(doc, "• " + t, x, y, maxW);  // sin y+4
+  y += 4;                               // separación entre bullets
+}
+
+y += 8;  // margen antes de la siguiente sección (kcal/macros)
+
 
   // 8) (sigues con kcal/macros, menús, exercici, IMC, disclaimer...)
 
@@ -666,6 +674,7 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
 
 
 
