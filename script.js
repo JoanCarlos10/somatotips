@@ -384,7 +384,7 @@ btn.addEventListener("click", () => {
   y += 10;
 
   doc.setFont("helvetica","bold");
-  doc.text("Pautes clau:", x, y+=14);
+  doc.text("Pautes clau:", x, y+=20);
   doc.setFont("helvetica","normal");
   conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y+4, maxW); });
   y += 10;
@@ -666,3 +666,4 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
