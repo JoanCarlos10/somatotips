@@ -394,7 +394,7 @@ for (const t of conf.tips) {
   y += 12;                               // separación entre bullets
 }
 
-y += 8;  // margen antes de la siguiente sección (kcal/macros)
+y += 15;  // margen antes de la siguiente sección (kcal/macros)
 
 
   // 8) (sigues con kcal/macros, menús, exercici, IMC, disclaimer...)
@@ -674,6 +674,7 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
 
 
 
