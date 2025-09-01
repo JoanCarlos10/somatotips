@@ -603,6 +603,21 @@ doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
     doc.text(`Pes: ${isNaN(pes) ? "—" : pes+" kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); y += 16;
     if (imc !== null){ doc.text(`IMC: ${imc.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); y += 16; }
 
+   // --- Tips ---
+doc.setFont("helvetica", "bold");
+doc.setFontSize(12);
+doc.text("Pautes clau:", x, y);   // título en la posición actual
+y += 18;                          // espacio bajo el título
+
+doc.setFont("helvetica", "normal");
+doc.setFontSize(11);
+conf.tips.forEach(t => {
+  y = wrap(doc, "• " + t, x, y, maxW);  // imprime bullet
+  y += 6;                               // espacio entre bullets
+});
+
+y += 10;  // margen antes de la siguiente sección
+ 
 
     // Kcal
     if (kcalText) { y = wrap(doc, kcalText, x, y, maxW); y += 6; }
@@ -668,6 +683,7 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
 
 
 
