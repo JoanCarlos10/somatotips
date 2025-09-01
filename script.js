@@ -383,21 +383,21 @@ btn.addEventListener("click", () => {
   y = wrap(doc, conf.intro, x, y, maxW);  
   y += 10;
 
-// Tips
-doc.setFont("helvetica","bold");
-doc.text("Pautes clau:", x, y);   // escribe en Y actual
-y += 20;                          // espacio debajo del título
+// --- Tips (sin solaparse) ---
+doc.setFont("helvetica", "bold");
+doc.setFontSize(12);
+doc.text("Pautes clau:", x, y);   // no uses y += aquí
+y += 18;                          // espacio bajo el título
 
-doc.setFont("helvetica","normal");
+doc.setFont("helvetica", "normal");
+doc.setFontSize(11);
 for (const t of conf.tips) {
-  y = wrap(doc, "• " + t, x, y, maxW);  // sin y+4
-  y += 12;                               // separación entre bullets
+  y = wrap(doc, "• " + t, x, y, maxW); // sin y+4
+  y += 6;                               // separación entre bullets
 }
 
-y += 15;  // margen antes de la siguiente sección (kcal/macros)
+y += 10;  // margen antes de la siguiente sección
 
-
-  // 8) (sigues con kcal/macros, menús, exercici, IMC, disclaimer...)
 
      // Kcal
   if (kcalText) {
@@ -603,12 +603,6 @@ doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
     doc.text(`Pes: ${isNaN(pes) ? "—" : pes+" kg"} · Activitat: ${activitat} · Objectiu: ${objectiu}`, x, y); y += 16;
     if (imc !== null){ doc.text(`IMC: ${imc.toFixed(1)} · Somatotip orientatiu: ${somato}`, x, y); y += 16; }
 
-    // Intro + tips
-    y = wrap(doc, conf.intro, x, y, maxW);  y += 10;
-    doc.setFont("helvetica","bold"); doc.text("Pautes clau:", x, y+=14);
-    doc.setFont("helvetica","normal");
-    conf.tips.forEach(t => { y = wrap(doc, "• " + t, x, y+4, maxW); });
-    y += 10;
 
     // Kcal
     if (kcalText) { y = wrap(doc, kcalText, x, y, maxW); y += 6; }
@@ -674,6 +668,7 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   };
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
+
 
 
 
