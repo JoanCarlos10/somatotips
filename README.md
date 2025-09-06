@@ -27,8 +27,3 @@ Quan la web estigui publicada amb **GitHub Pages**, la podràs visitar aquí:
 ---
 
 ✍️ Desenvolupat com a part del **Treball de Recerca (Batxillerat)**.
-
----
-
-## 🔑 Paraules clau
-Somatotip, ciència, pseudociència, antropometria, morfologia, biologia, recerca, Batxillerat, formulari, testimonis, FAQ, recursos interactius
