@@ -590,7 +590,7 @@ doc.save(`pla_${mapName[objectiu] || "personalitzat"}_${Date.now()}.pdf`);
     const r = document.getElementById("resultat")?.textContent || ""; // "Resultat: IMC 21.2 → normal"
     const m = r.match(/IMC\s+([\d.]+)/);
     if (m){ imc = parseFloat(m[1]); somato = somatoFromIMC(imc); }
-    const explicacioIMC = document.getElementById("explicacio-imc")?.innerText || "";
+    const explicacioIMC = "Què és l'IMC? L’IMC és una fórmula que serveix per relacionar el pes d’una persona amb la seva alçada. Es calcula dividint el pes en quilos per l’alçada al quadrat en metres (kg/m²). S’utilitza sobretot per classificar si una persona té pes normal, sobrepès o obesitat, però no diferencia si el pes és greix o és múscul.";
 
     // Crear PDF
     const doc = new jsPDF({ unit: "pt", format: "a4" });
@@ -664,7 +664,7 @@ y += 10;  // margen antes de la siguiente sección
       y += 6;
     }
     doc.setFont("helvetica","italic");
-    y = wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", x, y, maxW);
+    y = wrap(doc, "* Document orientatiu per al TR. No substitueix l’assessorament professional.", x, y, maxW);
 
     // Guardar
     const mapName = { perdre: "baixar_pes", mantenir: "manteniment", guanyar: "guanyar_pes" };
