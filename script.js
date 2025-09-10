@@ -448,16 +448,16 @@ menu.forEach(dia => {
   doc.setFont("helvetica","normal"); doc.setFontSize(11);
   exercici.forEach(p => { y = wrap(doc, "• " + p, x, y + 14, maxW); });
 
+  
       // Nota IMC y disclaimer
   y += 18;
-  if (explicacioIMC) {
-    doc.setFont("helvetica","bold");
-    doc.text("Què és l’IMC?", x, y); doc.setFont("helvetica","normal");
-    y = wrap(doc, explicacioIMC, x, y + 14, maxW);
-    y += 6;
-  }
+  doc.setFont("helvetica","bold");
+  doc.text("Què és l’IMC?", x, y);
+  doc.setFont("helvetica","normal");
+  y = wrap(doc, "Què és l'IMC? l’IMC és una fórmula que serveix per relacionar el pes d’una persona amb la seva alçada. Es calcula dividint el pes en quilos per l’alçada al quadrat en metres (kg/m²). S’utilitza sobretot per classificar si una persona té pes normal, sobrepès o obesitat, però no diferencia si el pes és greix o és múscul.", x, y + 14, maxW);
+  y += 6;
   doc.setFont("helvetica","italic");
-  y = wrap(doc, "* Document orientatiu per al TDR. No substitueix l’assessorament professional.", x, y, maxW);
+  y = wrap(doc, "* Document orientatiu per al TR. No substitueix l’assessorament professional.", x, y, maxW);
 
   // 9) Guardar PDF
   const mapName = { perdre: "baixar_pes", mantenir: "manteniment", guanyar: "guanyar_pes" };
