@@ -40,8 +40,8 @@ document.getElementById("form-somatotip").addEventListener("submit", function(e)
     document.getElementById("resultat").textContent = `Resultat: IMC ${imc.toFixed(1)} → ${cat}`;
     document.getElementById("explicacio-imc").innerHTML =
       `Somatotip orientatiu: ${somatotip} (activitat: ${activitat})<br><br>` +
-      "Què és l'IMC? És l'Índex de Massa Corporal i es calcula dividint el pes (kg) per l'alçada al quadrat (m²). " +
-      "Serveix per estimar si el pes és baix, normal o alt en adults.";
+      "Què és l'IMC? L'IMC és una fórmula que serveix per relacionar el pes d'una persona amb la seva alçada. Es calcula dividint el pes en quilos per l'alçada al quadrat en metres (Kg/m²). S'utilitza sobretot per classificar si una persona té pes normal, sobrepès o obesitat, però no diferencia si el pes és greix o és múscul." +
+      " Per això, és només una orientació i no una mesura directa de la composició corporal.";
 
     // Menors: nota + taula segons gènere
 const notaDetails = document.getElementById("nota-details");
@@ -684,6 +684,47 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
 
+// --- Xat IA OpenAI ---
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatBox = document.getElementById('chat-box');
+
+if (chatForm && chatInput && chatBox) {
+  chatForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const userMsg = chatInput.value.trim();
+    if (!userMsg) return;
+    chatBox.innerHTML += `<div><b>Tu:</b> ${userMsg}</div>`;
+    chatInput.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Llama a la API de OpenAI (reemplaza TU_API_KEY por tu clave real)
+    chatBox.innerHTML += `<div class="muted">Pensant...</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer TU_API_KEY' // <-- PON TU API KEY AQUÍ
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [{role: 'user', content: userMsg}],
+          max_tokens: 300,
+          temperature: 0.7
+        })
+      });
+      const data = await response.json();
+      const aiMsg = data.choices?.[0]?.message?.content || "Error o resposta buida.";
+      chatBox.innerHTML += `<div><b>IA:</b> ${aiMsg}</div>`;
+    } catch (err) {
+      chatBox.innerHTML += `<div style="color:red"><b>IA:</b> Error de connexió o límit superat.</div>`;
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+}
 
 
 

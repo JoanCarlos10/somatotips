@@ -251,37 +251,6 @@
 </div>
     </div>
   </div>
-
-  <!-- Ideas de menú (ejemplos) -->
-  <div class="grid cols-3" style="margin-top:14px">
-    <div class="card">
-      <h3>Pèrdua de pes</h3>
-      <ul class="bullets">
-        <li>Iogurt + civada + fruita</li>
-        <li>Pollastre + amanida + pa integral</li>
-        <li>Truita + verdures</li>
-        <li>Snacks: fruita / fruits secs</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Manteniment</h3>
-      <ul class="bullets">
-        <li>Llet o vegetal + torrades integrals + fruita</li>
-        <li>Arròs integral + peix blau + amanida</li>
-        <li>Llegums + verdures</li>
-        <li>Snacks: iogurt / formatge tendre</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Guany muscular</h3>
-      <ul class="bullets">
-        <li>Truita + pa integral + fruita</li>
-        <li>Pasta integral + carn magra + verdures</li>
-        <li>Arròs + tonyina/ous + amanida</li>
-        <li>Snacks: iogurt grec / batut</li>
-      </ul>
-    </div>
-  </div>
 </section>
 
     <section id="imatges">
@@ -294,12 +263,16 @@
     </section>
 
     <section id="xat">
-      <h2>Xat IA (placeholder)</h2>
-      <div class="card">
-        <p>Aquí integrarem un xat IA (per ex., widget extern) per respondre preguntes.</p>
-        <button class="btn" onclick="alert('Demo: aquí aniria el xat IA')">Obrir xat (demo)</button>
-      </div>
-    </section>
+      <h2>Xat IA</h2>
+  <div class="card">
+    <div id="chat-box" style="height:220px; overflow-y:auto; background:#f8f8f8; padding:10px; margin-bottom:10px; border-radius:6px; font-size:1em;"></div>
+    <form id="chat-form" style="display:flex; gap:8px;">
+      <input type="text" id="chat-input" placeholder="Escriu la teva pregunta..." style="flex:1" autocomplete="off" required>
+      <button type="submit">Enviar</button>
+    </form>
+    <p class="muted" style="font-size:.85em; margin-top:8px;">Aquest xat utilitza IA (OpenAI API). No comparteixis dades personals.</p>
+  </div>
+</section>
 
     <section id="contacte">
       <h2>Contacte</h2>
