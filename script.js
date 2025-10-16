@@ -707,7 +707,7 @@ if (chatForm && chatInput && chatBox) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer TU_API_KEY' // <-- PON TU API KEY AQUÍ
+          'Authorization': 'Bearer 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' // <-- PON TU API KEY AQUÍ
         },
         body: JSON.stringify({
           model: 'gpt-3.5-turbo',
