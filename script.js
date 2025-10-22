@@ -684,48 +684,33 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   btn.textContent = map[this.value] || "Descarregar PDF personalitzat";
 });
 
-// --- Xat IA OpenAI ---
-const chatForm = document.getElementById('chat-form');
-const chatInput = document.getElementById('chat-input');
-const chatBox = document.getElementById('chat-box');
+// ...existing code...
+document.getElementById('contact-form')?.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const form = e.target;
+  const status = document.getElementById('contact-status');
+  status.textContent = 'Enviant...';
+  const data = new FormData(form);
 
-if (chatForm && chatInput && chatBox) {
-  chatForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const userMsg = chatInput.value.trim();
-    if (!userMsg) return;
-    chatBox.innerHTML += `<div><b>Tu:</b> ${userMsg}</div>`;
-    chatInput.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // Llama a la API de OpenAI (reemplaza TU_API_KEY por tu clave real)
-    chatBox.innerHTML += `<div class="muted">Pensant...</div>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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' // <-- PON TU API KEY AQUÍ
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [{role: 'user', content: userMsg}],
-          max_tokens: 300,
-          temperature: 0.7
-        })
-      });
-      const data = await response.json();
-      const aiMsg = data.choices?.[0]?.message?.content || "Error o resposta buida.";
-      chatBox.innerHTML += `<div><b>IA:</b> ${aiMsg}</div>`;
-    } catch (err) {
-      chatBox.innerHTML += `<div style="color:red"><b>IA:</b> Error de connexió o límit superat.</div>`;
+  try {
+    const res = await fetch('https://formspree.io/f/https://formspree.io/f/xldpygkn', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: data
+    });
+    const json = await res.json();
+    if (res.ok) {
+      status.textContent = 'Missatge enviat. Gràcies!';
+      form.reset();
+    } else {
+      status.textContent = json.error || 'Error en l\'enviament.';
     }
-    chatBox.scrollTop = chatBox.scrollHeight;
-  });
-}
-
+  } catch (err) {
+    status.textContent = 'Error de connexió.';
+    console.error(err);
+  }
+});
+// ...existing code...
 
 
 
