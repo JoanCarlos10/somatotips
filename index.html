@@ -276,10 +276,14 @@
           <input type="number" name="edad" min="0" required>
         </label>
         <fieldset>
-          <legend>Sexe</legend>
-          <label><input type="radio" name="sexo" value="Home" required> Home</label>
-          <label><input type="radio" name="sexo" value="Dona"> Dona</label>
-        </fieldset>
+          <label>Sexe
+  <select name="sexo" required>
+    <option value="" disabled selected>Selecciona una opció</option>
+    <option value="Home">Home</option>
+    <option value="Dona">Dona</option>
+    <option value="Altres">Altres</option>
+  </select>
+</label>
         <label>Altura (cm)
           <input type="number" name="altura" min="50" max="250" required>
         </label>
