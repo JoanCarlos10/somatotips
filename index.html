@@ -268,24 +268,173 @@
   <h2>Contacte</h2>
   <div class="card">
     <form id="contact-form">
-      <div>
-        <label>Nom</label>
-        <input type="text" name="name" required>
+      <input type="hidden" name="_subject" value="Resposta formulari Somatotips">
+
+      <div class="form-step" data-step="1">
+        <h3>1. Dades personals</h3>
+        <label>Edat
+          <input type="number" name="edad" min="0" required>
+        </label>
+        <fieldset>
+          <legend>Sexe</legend>
+          <label><input type="radio" name="sexo" value="Home" required> Home</label>
+          <label><input type="radio" name="sexo" value="Dona"> Dona</label>
+        </fieldset>
+        <label>Altura (cm)
+          <input type="number" name="altura" min="50" max="250" required>
+        </label>
+        <label>Peso (kg)
+          <input type="number" name="peso" min="20" max="300" required>
+        </label>
+        <label>Practiques esport regularment?
+          <select name="practiques" required>
+            <option value="">—</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
+            <option value="A vegades">A vegades</option>
+          </select>
+        </label>
+        <label>Quantes hores d'activitat física a la setmana?
+          <input type="text" name="hores_activitat" placeholder="p. ex. 3–5 h">
+        </label>
+        <label>Com descriuries la teva alimentació?
+          <select name="alimentacio" required>
+            <option value="">—</option>
+            <option value="equilibrada">Equilibrada</option>
+            <option value="alta_grasses">Alta en grasses</option>
+            <option value="alta_proteines">Alta en proteïnes</option>
+            <option value="irregular">Irregular</option>
+          </select>
+        </label>
       </div>
-      <div>
-        <label>Correu electrònic</label>
-        <input type="email" name="email" required>
+
+      <div class="form-step" data-step="2" style="display:none;">
+        <h3>2. Coneixements i percepció</h3>
+        <label>Coneixes el concepte de “somatotip”?
+          <select name="coneix_somatotip" required>
+            <option value="">—</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
+            <option value="Me_sona">Me sona</option>
+          </select>
+        </label>
+        <label>Quin creus que és el teu tipus corporal principal?
+          <select name="creu_tipus" required>
+            <option value="">—</option>
+            <option value="Endomorf">Endomorf (més greix i formes rodones)</option>
+            <option value="Mesomorf">Mesomorf (atlètic i fort)</option>
+            <option value="Ectomorf">Ectomorf (prim, llarg i lleuger)</option>
+            <option value="No_se">No sé</option>
+          </select>
+        </label>
+        <label>Creus que el teu cos ha canviat amb el temps?
+          <select name="canvi_cos" required>
+            <option value="">—</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
+            <option value="Una_mica">Una mica</option>
+          </select>
+        </label>
+        <label>Si has canviat, a què ho atribuïries més?
+          <select name="causa_canvi">
+            <option value="">—</option>
+            <option value="Exercici">Exercici físic</option>
+            <option value="Dieta">Dieta</option>
+            <option value="Edat">Edat</option>
+            <option value="Genetica">Factors genètics</option>
+            <option value="Altres">Altres (especifica)</option>
+          </select>
+        </label>
+        <label style="display:none;" id="altres-causa-wrap">Si "Altres", explica:
+          <input type="text" name="altres_causa" id="altres-causa-input">
+        </label>
       </div>
-      <div>
-        <label>Assumpte</label>
-        <input type="text" name="subject">
+
+      <div class="form-step" data-step="3" style="display:none;">
+        <h3>3. Experiències i creences</h3>
+        <label>Creus que és possible modificar el teu somatotip amb dieta i exercici?
+          <select name="modificar_somatotip" required>
+            <option value="">—</option>
+            <option value="1">1 — Totalment en desacord</option>
+            <option value="2">2</option>
+            <option value="3">3 — Ni d'acord ni en desacord</option>
+            <option value="4">4</option>
+            <option value="5">5 — Totalment d'acord</option>
+          </select>
+        </label>
+        <label>Has intentat canviar el teu tipus corporal alguna vegada?
+          <select name="intentat_canviar" required>
+            <option value="">—</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+        <label>Si la resposta és sí, quin va ser el resultat?
+          <select name="resultat_canvi">
+            <option value="">—</option>
+            <option value="Millora_notable">Millora notable</option>
+            <option value="Canvis_petits">Canvis petits</option>
+            <option value="Cap_canvi">Cap canvi</option>
+          </select>
+        </label>
+        <label>Quant de temps vas mantenir aquests hàbits?
+          <select name="temps_habits">
+            <option value="">—</option>
+            <option value="Menys_1_mes">Menys d'1 mes</option>
+            <option value="1_3_mesos">1–3 mesos</option>
+            <option value="Mes_6_mesos">Més de 6 mesos</option>
+          </select>
+        </label>
+        <label>Creus que la genètica limita molt el canvi corporal?
+          <select name="genetica_limita" required>
+            <option value="">—</option>
+            <option value="1">1 — Gens</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 — Molt</option>
+          </select>
+        </label>
       </div>
-      <div style="grid-column:1/-1">
-        <label>Missatge</label>
-        <textarea name="message" rows="5" required></textarea>
+
+      <div class="form-step" data-step="4" style="display:none;">
+        <h3>4. Opinions (respostes breus)</h3>
+        <label>Creus que el model dels somatotips és útil actualment?
+          <textarea name="q_util" rows="3"></textarea>
+        </label>
+        <label>Penses que classificar els cossos en tres tipus és massa simple?
+          <textarea name="q_simple" rows="3"></textarea>
+        </label>
+        <label>Creus que l'entorn (dieta, esport, estil de vida) pesa més que la genètica?
+          <textarea name="q_entorn" rows="3"></textarea>
+        </label>
+        <label>Et sembla que el teu somatotip influeix en el teu rendiment esportiu?
+          <textarea name="q_somatotip_rendiment" rows="3"></textarea>
+        </label>
+        <label>Quina importància dones a la dieta i a l'exercici en la forma del teu cos?
+          <select name="importancia">
+            <option value="">—</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </label>
       </div>
-      <div style="grid-column:1/-1; margin-top:8px;">
-        <button type="submit">Enviar</button>
+
+      <div class="form-step" data-step="5" style="display:none;">
+        <h3>5. Resum (breu)</h3>
+        <label>En poques paraules, explica si creus que el teu cos ha canviat gràcies als teus hàbits o per la genètica.
+          <textarea name="conclusio" rows="5" required></textarea>
+        </label>
+      </div>
+
+      <div class="form-nav" style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+        <button type="button" id="prev-step" style="display:none;">← Anterior</button>
+        <div style="flex:1; text-align:center;"><small id="step-indicator">Pas 1 de 5</small></div>
+        <button type="button" id="next-step">Següent →</button>
+        <button type="submit" id="submit-btn" style="display:none;">Enviar</button>
         <span id="contact-status" class="muted" style="margin-left:10px;"></span>
       </div>
     </form>

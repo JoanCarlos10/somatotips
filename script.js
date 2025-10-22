@@ -685,31 +685,101 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
 });
 
 // ...existing code...
-document.getElementById('contact-form')?.addEventListener('submit', async function(e){
-  e.preventDefault();
-  const form = e.target;
-  const status = document.getElementById('contact-status');
-  status.textContent = 'Enviant...';
-  const data = new FormData(form);
 
-  try {
-    const res = await fetch('https://formspree.io/f/https://formspree.io/f/xldpygkn', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: data
-    });
-    const json = await res.json();
-    if (res.ok) {
-      status.textContent = 'Missatge enviat. Gràcies!';
-      form.reset();
-    } else {
-      status.textContent = json.error || 'Error en l\'enviament.';
-    }
-  } catch (err) {
-    status.textContent = 'Error de connexió.';
-    console.error(err);
+// --- Multi-step form navigation for contact-form ---
+(function contactFormStepper(){
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  const steps = Array.from(form.querySelectorAll('.form-step'));
+  let idx = 0;
+  const prevBtn = document.getElementById('prev-step');
+  const nextBtn = document.getElementById('next-step');
+  const submitBtn = document.getElementById('submit-btn');
+  const indicator = document.getElementById('step-indicator');
+  const altresWrap = document.getElementById('altres-causa-wrap');
+  const altresInput = document.getElementById('altres-causa-input');
+
+  function showStep(i){
+    steps.forEach((s, k) => s.style.display = k === i ? '' : 'none');
+    prevBtn.style.display = i === 0 ? 'none' : '';
+    nextBtn.style.display = i === steps.length - 1 ? 'none' : '';
+    submitBtn.style.display = i === steps.length - 1 ? '' : 'none';
+    indicator.textContent = `Pas ${i+1} de ${steps.length}`;
+    // focus first input of step
+    const first = steps[i].querySelector('input,select,textarea');
+    if (first) first.focus();
   }
-});
+
+  function validStep(i){
+    const controls = Array.from(steps[i].querySelectorAll('input,select,textarea'));
+    // check only required controls
+    for (const c of controls){
+      if (c.required && !c.value) return false;
+    }
+    return true;
+  }
+
+  nextBtn.addEventListener('click', ()=>{
+    // validate current step
+    if (!validStep(idx)){
+      // mark invalid briefly
+      alert('Si us plau, completa els camps obligatoris del pas actual.');
+      return;
+    }
+    if (idx < steps.length - 1) { idx++; showStep(idx); }
+  });
+
+  prevBtn.addEventListener('click', ()=>{
+    if (idx > 0) { idx--; showStep(idx); }
+  });
+
+  // Mostrar/ocultar "altres" quan es selecciona Altres
+  const causaSel = form.querySelector('select[name="causa_canvi"]');
+  if (causaSel) {
+    causaSel.addEventListener('change', () => {
+      const val = causaSel.value;
+      if (val === 'Altres') altresWrap.style.display = '';
+      else {
+        altresWrap.style.display = 'none';
+        if (altresInput) altresInput.value = '';
+      }
+    });
+  }
+
+  showStep(0);
+
+  // Reemplaza el manejador de envío para usar endpoint correcto
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const status = document.getElementById('contact-status');
+    status.textContent = 'Enviant...';
+    const data = new FormData(form);
+
+    try {
+      // Ajusta aquest endpoint al teu Formspree real (sense repetir el domini)
+      const endpoint = 'https://formspree.io/f/xldpygkn';
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      });
+      const json = await res.json();
+      if (res.ok) {
+        status.textContent = 'Missatge enviat. Gràcies!';
+        form.reset();
+        // tornar a primer pas
+        idx = 0; showStep(idx);
+      } else {
+        status.textContent = json.error || 'Error en l\'enviament.';
+      }
+    } catch (err) {
+      status.textContent = 'Error de connexió.';
+      console.error(err);
+    }
+  });
+})();
+
 // ...existing code...
 
 
