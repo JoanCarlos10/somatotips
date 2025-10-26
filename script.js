@@ -1093,3 +1093,25 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
   });
 })();
  // ...existing code...
+
+ // ...existing code...
+(function debugUI(){
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('debug: DOMContentLoaded');
+    const next = document.getElementById('next-step');
+    const prev = document.getElementById('prev-step');
+    const form = document.getElementById('contact-form');
+    console.log('debug elements:', { next: !!next, prev: !!prev, form: !!form });
+
+    if (next) next.addEventListener('click', () => console.log('debug: next clicked'));
+    if (prev) prev.addEventListener('click', () => console.log('debug: prev clicked'));
+    if (form) form.addEventListener('submit', (e) => {
+      console.log('debug: contact-form submit triggered');
+      // muestra datos enviados (no sensible)
+      try {
+        const fd = new FormData(form);
+        for (const [k,v] of fd.entries()) console.log('form field', k, v);
+      } catch (err) { console.log('debug form read error', err); }
+    });
+  });
+})();
