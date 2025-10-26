@@ -744,3 +744,65 @@ form.form-vertical > div { width: 100%; }
 /* botones/dots */
 #testimonis .car-btn { display:inline-flex; align-items:center; justify-content:center; }
 #testimonis .car-dots { display:flex; gap:8px; justify-content:center; margin-top:8px; }
+
+// ...existing code...
+/* FORZAR VISIBILIDAD TESTIMONIS (pegar al final del CSS) */
+#testimonis {
+  position: relative;
+  z-index: 5;
+  background: transparent;
+  padding: 12px 0;
+}
+
+/* Asegurar que no esté oculto por atributos/transform/opacity */
+#testimonis, 
+#testimonis .carousel, 
+#testimonis .car-track, 
+#testimonis .car-slide, 
+#testimonis blockquote, 
+#testimonis figcaption {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Si hay [hidden] en los elementos */
+#testimonis [hidden] { display: block !important; }
+
+/* Force layout del carrusel: elementos en fila y con altura mínima */
+#testimonis .car-track {
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+  min-height: 90px !important;
+  padding: 10px 0 !important;
+  overflow: visible !important;
+}
+
+/* Estilo de las tarjetas para que el texto contraste */
+#testimonis .car-slide {
+  position: relative !important;
+  width: auto !important;
+  max-width: 720px;
+  background: #ffffff !important;
+  color: #111 !important;
+  padding: 14px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+/* Asegurar color del texto */
+#testimonis blockquote,
+#testimonis figcaption,
+#testimonis .muted {
+  color: #111 !important;
+}
+
+/* Botones y dots visibles */
+#testimonis .car-btn,
+#testimonis .car-dots { display: block !important; visibility: visible !important; opacity: 1 !important; }
+#testimonis .car-dots { margin-top: 8px; gap: 8px; justify-content: center; display:flex !important; }
+
+/* Si el hero o un overlay tapa la sección */
+header.hero { z-index: 1; position: relative; }
