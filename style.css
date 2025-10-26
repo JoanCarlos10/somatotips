@@ -617,3 +617,51 @@ form.form-vertical > div { width: 100%; }
   /* Alinea el logo y el menú en el centro visualmente */
   nav .bar { justify-content: center; }
 }
+
+/* Menú compacto en móvil: ocupa muy poco espacio */
+@media (max-width: 760px) {
+  nav .bar {
+    padding: 8px 12px;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Logo pequeño a la izquierda */
+  .logo { order: 0; width: auto; margin: 0; }
+  .logo img { max-height: 34px; display:inline-block; vertical-align:middle; }
+
+  /* Menú en una sola fila, sin ocupar pantalla completa (scroll horizontal si hace falta) */
+  .menu {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 0;
+    width: calc(100% - 64px); /* deja espacio para el logo a la izquierda */
+    align-items: center;
+  }
+
+  .menu a {
+    white-space: nowrap;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    border-radius: 999px;
+    text-align: center;
+    background: transparent;
+  }
+
+  .menu a:hover { background: rgba(0,0,0,0.04); }
+
+  /* Hero menos alto para no empujar contenido */
+  .hero { padding: 20px 0 12px; }
+  .hero h1 { font-size: 1.25rem; }
+
+  /* Asegura que el nav no ocupe mucha altura */
+  nav { height: auto; min-height: 48px; }
+
+  /* Opcional: esconder logo si necesitas aún más espacio
+  .logo { display: none; }
+  */
+}
