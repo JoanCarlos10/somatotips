@@ -1000,3 +1000,96 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
     }
   });
 })();
+
+// ...existing code...
+(function contactFormStepper(){
+  // Safe, robust multi-step + envio a Formspree. No llança errors si falten elements.
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    const steps = Array.from(form.querySelectorAll('.form-step')) || [];
+    const prevBtn = document.getElementById('prev-step');
+    const nextBtn = document.getElementById('next-step');
+    const submitBtn = document.getElementById('submit-btn');
+    const indicator = document.getElementById('step-indicator');
+    let idx = 0;
+
+    function showStep(i) {
+      if (steps.length === 0) {
+        if (indicator) indicator.textContent = 'Pas 1 de 1';
+        return;
+      }
+      idx = Math.max(0, Math.min(i, steps.length - 1));
+      steps.forEach((s, k) => s.style.display = k === idx ? '' : 'none');
+      if (prevBtn) prevBtn.style.display = idx === 0 ? 'none' : '';
+      if (nextBtn) nextBtn.style.display = idx === steps.length - 1 ? 'none' : '';
+      if (submitBtn) submitBtn.style.display = idx === steps.length - 1 ? '' : 'none';
+      if (indicator) indicator.textContent = `Pas ${idx + 1} de ${steps.length}`;
+      const first = steps[idx]?.querySelector('input,select,textarea');
+      if (first) first.focus();
+    }
+
+    function validStep(i) {
+      if (!steps.length) return true;
+      const controls = Array.from(steps[i].querySelectorAll('input,select,textarea'));
+      for (const c of controls) {
+        if (c.required && !c.value) {
+          // Use native validation UI when available
+          if (typeof c.reportValidity === 'function') c.reportValidity();
+          c.focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Attach navigation handlers only if buttons exist
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        if (!validStep(idx)) return;
+        if (idx < steps.length - 1) showStep(idx + 1);
+      });
+    }
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (ev) => { ev.preventDefault(); if (idx > 0) showStep(idx - 1); });
+    }
+
+    // Init visible step
+    if (steps.length) showStep(0);
+
+    // Enviament: robust, mostra estat i evita errors si no hi ha element d'estat
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('contact-status');
+      if (status) status.textContent = 'Enviant...';
+
+      const fd = new FormData(form);
+      fd.append('_subject', 'Resposta Enquesta Somatotips');
+
+      try {
+        const endpoint = 'https://formspree.io/f/xldpygkn'; // reemplaça si cal
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: fd
+        });
+
+        if (res.ok) {
+          if (status) status.textContent = "S'ha enviat la teva resposta. Gràcies!";
+          form.reset();
+          if (steps.length) showStep(0);
+        } else {
+          const txt = await res.text().catch(()=>null);
+          console.error('Formspree error', res.status, txt);
+          if (status) status.textContent = 'Error en l\'enviament. Torna-ho a provar.';
+        }
+      } catch (err) {
+        console.error('Enviament fallit:', err);
+        if (status) status.textContent = 'Error de connexió.';
+      }
+    });
+  });
+})();
+ // ...existing code...
