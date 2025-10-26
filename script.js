@@ -899,3 +899,104 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
     setTimeout(sendData, 350);
   }, false);
 })();
+
+// ...existing code...
+(function initContactFormAndStepper(){
+  document.addEventListener('DOMContentLoaded', function () {
+    // --------- Enviament a Formspree per a la "enquesta" ----------
+    const contactForm = document.getElementById('contact-form');
+    const contactStatus = document.getElementById('contact-status');
+
+    // REEMPLAÇA per el teu endpoint si cal
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xldpygkn';
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (contactStatus) contactStatus.textContent = 'Enviant la teva resposta...';
+
+        try {
+          const fd = new FormData(contactForm);
+          fd.append('_subject', 'Resposta Enquesta Somatotips');
+
+          const res = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: fd
+          });
+
+          if (res.ok) {
+            if (contactStatus) contactStatus.textContent = "S'ha enviat la teva resposta. Gràcies!";
+            contactForm.reset();
+            // tornar a primer pas
+            showStep(0);
+          } else {
+            console.error('Formspree error', res.status, await res.text().catch(()=>''));
+            if (contactStatus) contactStatus.textContent = 'Error en enviar. Torna-ho a provar.';
+          }
+        } catch (err) {
+          console.error('Error enviant enquesta:', err);
+          if (contactStatus) contactStatus.textContent = 'Error de connexió en enviar la resposta.';
+        }
+      });
+    }
+
+    // --------- Multi-step: següent / anterior per a la "enquesta" ----------
+    if (contactForm) {
+      const steps = Array.from(contactForm.querySelectorAll('.form-step'));
+      const prevBtn = document.getElementById('prev-step');
+      const nextBtn = document.getElementById('next-step');
+      const submitBtn = document.getElementById('submit-btn');
+      const stepIndicator = document.getElementById('step-indicator');
+      let current = 0;
+
+      function updateNav() {
+        if (prevBtn) prevBtn.style.display = current === 0 ? 'none' : 'inline-block';
+        if (nextBtn) nextBtn.style.display = current === steps.length - 1 ? 'none' : 'inline-block';
+        if (submitBtn) submitBtn.style.display = current === steps.length - 1 ? 'inline-block' : 'none';
+        if (stepIndicator) stepIndicator.textContent = `Pas ${current + 1} de ${steps.length}`;
+      }
+
+      window.showStep = function(i){
+        current = Math.min(Math.max(0, i), steps.length - 1);
+        steps.forEach((s, idx) => { s.style.display = idx === current ? '' : 'none'; });
+        updateNav();
+        // scroll suau cap al formulari si cal
+        steps[current].scrollIntoView && steps[current].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+
+      if (steps.length) showStep(0);
+
+      if (prevBtn) prevBtn.addEventListener('click', function () {
+        showStep(current - 1);
+      });
+
+      if (nextBtn) nextBtn.addEventListener('click', function () {
+        // validació simple dels camps requerits del pas actual
+        const requiredFields = Array.from(steps[current].querySelectorAll('[required]'));
+        for (const fld of requiredFields) {
+          if (fld.disabled) continue;
+          if (!fld.reportValidity || fld.reportValidity()) {
+            // reportValidity mostrará el mensaje natiu si falta
+          }
+          if (!fld.checkValidity()) {
+            fld.focus();
+            return; // no avancem fins que els camps requerits siguin vàlids
+          }
+        }
+        showStep(current + 1);
+      });
+
+      // Ajust per opció "Altres" en causa_canvi
+      const causaSelect = contactForm.querySelector('[name="causa_canvi"]');
+      const altresWrap = document.getElementById('altres-causa-wrap');
+      if (causaSelect && altresWrap) {
+        function toggleAltres() {
+          altresWrap.style.display = causaSelect.value === 'Altres' ? '' : 'none';
+        }
+        causaSelect.addEventListener('change', toggleAltres);
+        toggleAltres();
+      }
+    }
+  });
+})();
