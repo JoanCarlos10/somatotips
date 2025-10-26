@@ -783,51 +783,119 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
 // ...existing code...
 
 // ...existing code...
-
 (function sendSomatotypeSubmission(){
   const form = document.getElementById('form-somatotip');
   if (!form) return;
 
-  // Reemplaza por tu endpoint real (Formspree p. ej.: https://formspree.io/f/XXXXXX)
+  // REEMPLAZA por tu endpoint real de Formspree si hace falta
   const endpoint = 'https://formspree.io/f/xldpygkn';
 
+  // Crear elemento de estado si no existe
+  let statusEl = document.getElementById('form-somatotip-status');
+  if (!statusEl) {
+    statusEl = document.createElement('div');
+    statusEl.id = 'form-somatotip-status';
+    statusEl.style.marginTop = '8px';
+    statusEl.style.fontSize = '0.95em';
+    statusEl.className = 'muted';
+    form.parentNode.insertBefore(statusEl, form.nextSibling);
+  }
+
   form.addEventListener('submit', function () {
+    // espera breve para que el handler que calcula resultados haya terminado
     setTimeout(async () => {
       try {
-        const q = selector => (form.querySelector(selector)?.value || '').toString().trim();
-        const data = {
-          altura: q('input[name="altura"]'),
-          pes: q('input[name="pes"]'),
-          genere: q('select[name="genere"]'),
-          edat: q('input[name="edat"]'),
-          activitat: q('select[name="activitat"]'),
-          somatotip: document.getElementById('resultat')?.textContent?.trim() || '',
-          tip: document.getElementById('tip')?.textContent?.trim() || '',
-          imc_info: document.getElementById('explicacio-imc')?.textContent?.trim() || ''
-        };
+        statusEl.textContent = "Enviant la teva resposta...";
 
-        const formData = new FormData();
-        formData.append('_subject', 'Resposta Formulari Somatotip');
-        Object.entries(data).forEach(([k,v]) => formData.append(k, v));
+        const fd = new FormData(form);
+
+        // añadir resultados calculados desde el DOM si existen
+        fd.append('somatotip', document.getElementById('resultat')?.textContent?.trim() || '');
+        fd.append('tip', document.getElementById('tip')?.textContent?.trim() || '');
+        fd.append('imc_info', document.getElementById('explicacio-imc')?.textContent?.trim() || '');
+        fd.append('_subject', 'Resposta Formulari Somatotip');
 
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Accept': 'application/json' },
-          body: formData
+          body: fd
         });
 
-        if (!res.ok) {
-          console.error('Enviament formulari fallit:', res.status, await res.text());
+        if (res.ok) {
+          statusEl.textContent = "S'ha enviat la teva resposta. Gràcies!";
+          // opcional: limpiar formulario o volver a estado inicial tras 3s
+          setTimeout(() => { statusEl.textContent = ''; }, 5000);
         } else {
-          console.log('Resposta enviada correctament.');
+          const txt = await res.text().catch(()=>null);
+          console.error('Form submission failed:', res.status, txt);
+          statusEl.textContent = "Error en enviar la resposta. Torna-ho a provar.";
         }
       } catch (err) {
-        console.error('Error enviant la resposta:', err);
+        console.error('Error sending form:', err);
+        statusEl.textContent = "Error de connexió en enviar la resposta.";
       }
-    }, 300);
+    }, 350);
   });
 })();
 
+// Envia datos del formulari (form-somatotip) a un endpoint (Formspree u otro)
+(function sendSomatotypeSubmission(){
+  const form = document.getElementById('form-somatotip');
+  if (!form) return;
 
+  // REEMPLAZA por tu endpoint real (Formspree p. ej. https://formspree.io/f/XXXXX)
+  const endpoint = 'https://formspree.io/f/xldpygkn';
 
+  // Crear/obtener elemento de estado
+  let statusEl = document.getElementById('form-somatotip-status');
+  if (!statusEl) {
+    statusEl = document.createElement('div');
+    statusEl.id = 'form-somatotip-status';
+    statusEl.style.marginTop = '8px';
+    statusEl.style.fontSize = '0.95em';
+    statusEl.className = 'muted';
+    form.parentNode.insertBefore(statusEl, form.nextSibling);
+  }
 
+  async function sendData() {
+    try {
+      statusEl.textContent = "Enviant la teva resposta...";
+
+      const fd = new FormData(form);
+
+      // Añadir resultados calculados del DOM (si existen)
+      const resultatEl = document.getElementById('resultat');
+      const tipEl = document.getElementById('tip');
+      const imcEl = document.getElementById('explicacio-imc');
+
+      fd.append('resultat_imc', resultatEl ? resultatEl.textContent.trim() : '');
+      fd.append('tip', tipEl ? tipEl.textContent.trim() : '');
+      fd.append('imc_info', imcEl ? imcEl.textContent.trim() : '');
+      fd.append('_subject', 'Resposta Formulari Somatotip');
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: fd
+      });
+
+      if (res.ok) {
+        statusEl.textContent = "S'ha enviat la teva resposta. Gràcies!";
+        setTimeout(() => { statusEl.textContent = ''; }, 5000);
+      } else {
+        const bodyText = await res.text().catch(()=>null);
+        console.error('Enviament fallit:', res.status, bodyText);
+        statusEl.textContent = "Error en enviar la resposta. Torna-ho a provar.";
+      }
+    } catch (err) {
+      console.error('Error enviant la resposta:', err);
+      statusEl.textContent = "Error de connexió en enviar la resposta.";
+    }
+  }
+
+  // No impedir el submit (el handler principal del formulari ya hace preventDefault).
+  form.addEventListener('submit', function () {
+    // Esperar un poco para que el cálculo y DOM se actualicen antes de enviar
+    setTimeout(sendData, 350);
+  }, false);
+})();
