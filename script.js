@@ -782,7 +782,51 @@ document.querySelector('#dietes-form select[name="objectiu"]')?.addEventListener
 
 // ...existing code...
 
+// ...existing code...
 
+(function sendSomatotypeSubmission(){
+  const form = document.getElementById('form-somatotip');
+  if (!form) return;
+
+  // Reemplaza por tu endpoint real (Formspree p. ej.: https://formspree.io/f/XXXXXX)
+  const endpoint = 'https://formspree.io/f/xldpygkn';
+
+  form.addEventListener('submit', function () {
+    setTimeout(async () => {
+      try {
+        const q = selector => (form.querySelector(selector)?.value || '').toString().trim();
+        const data = {
+          altura: q('input[name="altura"]'),
+          pes: q('input[name="pes"]'),
+          genere: q('select[name="genere"]'),
+          edat: q('input[name="edat"]'),
+          activitat: q('select[name="activitat"]'),
+          somatotip: document.getElementById('resultat')?.textContent?.trim() || '',
+          tip: document.getElementById('tip')?.textContent?.trim() || '',
+          imc_info: document.getElementById('explicacio-imc')?.textContent?.trim() || ''
+        };
+
+        const formData = new FormData();
+        formData.append('_subject', 'Resposta Formulari Somatotip');
+        Object.entries(data).forEach(([k,v]) => formData.append(k, v));
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        });
+
+        if (!res.ok) {
+          console.error('Enviament formulari fallit:', res.status, await res.text());
+        } else {
+          console.log('Resposta enviada correctament.');
+        }
+      } catch (err) {
+        console.error('Error enviant la resposta:', err);
+      }
+    }, 300);
+  });
+})();
 
 
 
