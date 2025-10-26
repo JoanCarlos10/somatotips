@@ -98,15 +98,24 @@ document.querySelectorAll('#faq details').forEach((det) => {
 });
 
 // Carrusel Testimonis
+// ...existing code...
 (() => {
   const root = document.querySelector('#testimonis .carousel');
   if (!root) return;
 
   const track = root.querySelector('.car-track');
+  if (!track) return; // evita error si falta el track
+
   const slides = Array.from(track.children);
   const prevBtn = root.querySelector('.prev');
   const nextBtn = root.querySelector('.next');
   const dotsWrap = root.querySelector('.car-dots');
+
+  if (!prevBtn || !nextBtn || !dotsWrap || slides.length === 0) return;
+
+  // ...existing code...
+  // (resto del código del carrusel)
+
 
   // Crear dots
   dotsWrap.innerHTML = slides.map((_,i)=>
