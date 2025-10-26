@@ -706,3 +706,41 @@ form.form-vertical > div { width: 100%; }
     width: 100% !important;
   }
 }
+
+/* Fix: asegurar que el bloque de testimonis sea visible */
+#testimonis,
+#testimonis .carousel,
+#testimonis .car-track,
+#testimonis .car-slide,
+#testimonis .car-slide blockquote,
+#testimonis .car-slide figcaption {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #111 !important;
+}
+
+#testimonis .car-track {
+  display: flex !important;
+  gap: 12px;
+  align-items: flex-start;
+  min-height: 64px; /* evita colapso del contenedor */
+}
+
+#testimonis .car-slide.card {
+  background: #fff;
+  color: #111;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+#testimonis blockquote {
+  margin: 0 0 8px 0;
+  color: inherit;
+  font-style: normal;
+}
+
+/* botones/dots */
+#testimonis .car-btn { display:inline-flex; align-items:center; justify-content:center; }
+#testimonis .car-dots { display:flex; gap:8px; justify-content:center; margin-top:8px; }
