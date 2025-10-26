@@ -497,3 +497,87 @@ ul.bullets li { margin: 6px 0; }
   box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
 #dietes-pdf:hover { filter: brightness(0.95); }
+
+/* ...existing code... */
+
+/* Imágenes y logos responsivos */
+img { max-width: 100%; height: auto; display: block; }
+
+/* Contenedor con padding móvil */
+.container { padding: 0 16px; box-sizing: border-box; }
+
+/* Menú: que se ajuste y haga wrap en pantallas pequeñas */
+nav .menu {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Tarjetas y layout general */
+.card { padding: 18px; box-sizing: border-box; }
+h1 { line-height: 1.1; }
+
+/* Formularios: que los campos ocupen toda la anchura en móvil */
+form.form-vertical > div,
+.form-step > label,
+form.grid.cols-3 { box-sizing: border-box; }
+form.grid.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+form.form-vertical > div { width: 100%; }
+
+/* Tablas responsivas */
+.tabla-imc-menors {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tabla-imc-menors thead th, .tabla-imc-menors td { padding:6px; }
+
+/* Carousel ajustes */
+.carousel .car-track { display: flex; gap: 12px; overflow: hidden; }
+
+/* Botones y navegación de formulario */
+.form-nav { display:flex; gap:8px; align-items:center; }
+
+/* Media queries: móviles y tablets */
+@media (max-width: 900px) {
+  /* reducir tamaño de header logo */
+  .logo img { height: 42px; }
+  header .container { padding: 18px 0; }
+
+  /* Formularios en 2 columnas */
+  form.grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  /* Nav apilado en móvil */
+  nav .container.bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+  nav .menu { flex-direction: column; width: 100%; }
+
+  /* Hero y títulos */
+  .hero img { height: 120px; }
+  .hero h1 { font-size: 1.25rem; text-align: center; }
+
+  /* Formularios: 1 columna y campos grandes */
+  form.grid.cols-3 { grid-template-columns: 1fr; }
+  .form-step { padding: 6px 0; }
+  .form-step label, .form-step input, .form-step select, .form-step textarea {
+    width: 100%;
+    display: block;
+  }
+
+  /* Panel de resultados y tarjetas ocupan ancho */
+  .card, #panel-resultat { width: 100%; padding: 14px; }
+
+  /* Navegación de pasos: apilar y botones anchos */
+  .form-nav { flex-direction: column; align-items: stretch; }
+  .form-nav button, .form-nav #submit-btn { width: 100%; padding: 10px; }
+  .form-nav small#step-indicator { order: -1; margin-bottom: 6px; text-align:center; }
+
+  /* Tabla con scroll horizontal si hace falta */
+  details #tabla-home, details #tabla-dona { display: block; overflow-x: auto; width: 100%; }
+
+  /* Ajustes de footer */
+  footer .container { padding: 12px 0; text-align: center; font-size: .95rem; }
+}
+
+/* ...existing code... */
