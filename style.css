@@ -582,42 +582,6 @@ form.form-vertical > div { width: 100%; }
 
 /* ...existing code... */
 
-/* Mejoras header / menú en móvil */
-@media (max-width: 760px) {
-  nav .bar {
-    padding: 10px 12px;
-    align-items: center;
-  }
-
-  /* Logo: tamaño más pequeño y centrado encima del menú */
-  .logo { order: -1; width: 100%; text-align: center; margin-bottom: 8px; }
-  .logo img { max-height: 40px; }
-
-  /* Menú en dos columnas para aprovechar el ancho y aumentar área táctil */
-  .menu {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    width: 100%;
-  }
-
-  .menu a {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    padding: 12px 8px;
-    font-size: 1rem;
-    border-radius: 10px;
-    box-shadow: none;
-  }
-
-  /* Espacio entre la cabecera y el hero */
-  .hero { padding-top: 20px; }
-
-  /* Alinea el logo y el menú en el centro visualmente */
-  nav .bar { justify-content: center; }
-}
-
 /* Menú compacto en móvil: ocupa muy poco espacio */
 @media (max-width: 760px) {
   nav .bar {
